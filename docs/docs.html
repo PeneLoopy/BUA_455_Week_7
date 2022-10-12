@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>BUA 455 - Week 7</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Penelope Pooler Eisenbies" />
+    <meta name="date" content="2022-10-12" />
+    <script src="docs_files/header-attrs/header-attrs.js"></script>
+    <link href="docs_files/panelset/panelset.css" rel="stylesheet" />
+    <script src="docs_files/panelset/panelset.js"></script>
+    <link href="docs_files/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="docs_files/tile-view/tile-view.js"></script>
+    <script src="docs_files/xaringanExtra_fit-screen/fit-screen.js"></script>
+    <link href="docs_files/tachyons/tachyons.min.css" rel="stylesheet" />
+    <link href="docs_files/animate.css/animate.xaringan.css" rel="stylesheet" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+background-image: url("docs_files/images/sloth_faded.png")
+background-size: cover
+
+class: bottom, right
+
+## BUA 455 - Week 7
+
+### Time Series, Data Formats, Output Formats, Project Intro 
+
+&lt;br&gt;
+
+
+#### Penelope Pooler Eisenbies
+
+#### 2022-10-12
+
+[Wikipedia Sloth Page](https://en.wikipedia.org/wiki/Sloth)
+
+---
+
+### Quiz 1 
+
+- Quiz 1 is now graded
+
+  - 60%: Submitted Markdown File
+  
+  - 40%: Blackboard Answers + Submitted .csv file + Submitted .png file
+
+- For the most part scores were very high
+
+  - This tells me that most of you are learning to use these skills
+  
+  - Please don't worry if you are not happy with your score
+  
+- Quiz 2 will be during Week 11 and will combine previous skills with material from weeks 6 through 10
+
+  - Same format but more questions
+  
+  - More multi-step tasks
+
+- If you have questions about your quiz, please let me know
+
+---
+
+### BUA 455 Group Dashboard Project
+
+#### Groups
+
+- Complete HW 4 - Part 1 TODAY! (This should only take 5 min.)
+
+  - **Note:** If you do not complete this Survey, I will not put you in a project group and you can not pass this class.
+  
+- Groups of 6 will be determined and posted (Hopefully by Thursday)
+
+- If you have a request to work with someone, include that information in your survey.
+
+  - Today is your last chance to let me know.
+
+  - I cannot guarantee that requests will be honored, but I will try.
+  
+&lt;br&gt;
+
+#### Project Information Links
+
+- [Project Description](https://docs.google.com/document/d/1U-DJ3yeHPpxcg1o12Cg2qc2Besb6Jw6UiyAo6gR4S2I/edit?usp=sharing)
+
+- Project Ideas, Data Sources, etc. will be posted soon
+
+---
+
+### Upcoming Dates
+
+- **October 14th-16th:** Professor Pooler is out of town
+  - I will not be checking email.
+  
+- **Groups assigned by October 18th, but possibly sooner.**
+  
+- **Mon. October 24th:** Draft Proposals Due (2 - 3 paragraphs)
+
+- **Thu. October 27th:** 
+  - Groups should come with questions and be prepared to answer my questions (5 min. per groups)
+
+-   **Mon. October 31st:**  Final Proposals Due
+
+-   **Wed. November 2nd:**  HW 5 - Part 1 Due
+
+-   **Thu. November 10th:**  Quiz 2 (Updated Schedule)
+
+---
+
+### Questions about HW 4
+
+- Chunk Headers  
+  
+  - In Chunk 6 (Part 5), the chunk header in the the template appears as follows:
+
+    ```
+    {r create and save plot, eval=F}
+
+    ```
+- The `eval=F` prevents this chunk from being evaluated when it is knit.
+
+- It was included in the template because the original code provided was incomplete and incorrect and would cause errors when knit.
+
+- You are asked to remove the comma and the text `eval=F`
+
+- There are many other chunk header options.
+
+- Two common ones that you will use in your project are `echo=F` and `include=F`
+
+- Markdown References
+
+  - [Cheat Sheet](https://github.com/rstudio/cheatsheets/raw/main/rmarkdown-2.0.pdf)
+  
+  - [Reference Guide](https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf)
+
+---
+
+### Markdown Output Formats
+
+- So far, all work in this course has been done in R Markdown and we have intentionally used the default output format.
+
+- Other common formats are Word documents, PDF documents, Powerpoint Slides, and **dashboards**
+
+#### Dashboard Templates in the `flexdashboard` package
+
+- There are many types of dashboards. Here are [some example dashboards](https://rstudio.github.io/flexdashboard/articles/examples.html) created with `flexdashboard` and other packages in R
+
+- For this course (which focuses on Data Management), we will use a excellent introductory option, [storyboard](https://beta.rstudioconnect.com/jjallaire/htmlwidgets-showcase-storyboard/htmlwidgets-showcase-storyboard.html)
+  
+  - This template simplifies the dashboard development process 
+  
+  - Can be used to present data and visualizations in a progression
+
+- The Storyboard template is an R Markdown file with some very **specific pre-set features**
+
+  - **These minor details are required** or the dashboard will not knit correctly.
+
+  - HW 5 - Part 1 and HW 5 - Part 2 will be completed in a storyboard dashboard format to give you practice working with data in this way.
+
+---
+
+### Types of Time Series Data in R
+
+- In recent weeks, we have worked with Box Office Mojo and Bureau of Labor Statistics Data
+
+- These datasets all include a date variable and another quantitative variable that changes at each time period, e.g. 
+
+  - movie gross (HW 3)
+  - unemployment rate (HW 4)
+  - import and export indices (HW 4)
+  
+- All of these datasets are considered time series but the data format in R is called a `tibble`.
+
+- Two common data formats in R, `tibble` and `data.frame` are needed for creating ggplots of time series.
+  `tibble` are the more modern format and are more compatible with `tidyverse` commands to manage data.
+  
+- Today, we'll discuss a third data format, `xts` 
+
+
+---
+
+### Importing Stock Data as `xts` using `tidyquant` Package
+
+- [Yahoo Finance](https://finance.yahoo.com/), the Federal Reserve Bank, WSJ and others are excellent data sources that can be directly imported into R
+  
+  - default for `getsymbols` in the `tidyquant` package is Yahoo Finance
+  
+  - Data format is `xts` which we will cover today
+  
+
+```r
+# download data from Netflix, Amazon, Disney
+getSymbols("NFLX", from = "2012-01-01", to = "2022-10-01")
+getSymbols("AMZN", from = "2012-01-01", to = "2022-10-01")
+getSymbols("DIS", from = "2012-01-01", to = "2022-10-01")
+```
+
+---
+
+### Example of Imported Yahoo Finance Data
+
+By default, imported datas are assigned to stock symbol in ALL CAPS, e.g. **NFLX**
+
+
+```r
+head(NFLX)
+```
+
+```
+##            NFLX.Open NFLX.High NFLX.Low NFLX.Close NFLX.Volume NFLX.Adjusted
+## 2012-01-03  10.04000  10.38857 10.01857   10.32000    29213800      10.32000
+## 2012-01-04  10.33571  11.56714 10.25857   11.49286   100489900      11.49286
+## 2012-01-05  11.34571  11.69429 11.04000   11.32857    86552900      11.32857
+## 2012-01-06  11.30286  12.47143 11.24286   12.32714   125610800      12.32714
+## 2012-01-09  12.80143  14.23571 12.44857   14.02571   214073300      14.02571
+## 2012-01-10  14.25714  14.26286 13.21429   13.69000   146335000      13.69000
+```
+
+---
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"slideNumberFormat": "%current%/%total%",
+"highlightStyle": "tomorrow-night-bright",
+"highlightLines": true,
+"ratio": "16:9",
+"countIncrementalSlides": true,
+"keep_md": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

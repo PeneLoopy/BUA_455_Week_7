@@ -1,368 +1,333 @@
 ---
-title: "Presentation Ninja"
-subtitle: "&#x2694;&#xFE0F; xaringan +<br/>&#x1F60E; xaringanthemer"  
-author: 
-  - "Yihui Xie"
-  - "Garrick Aden-Buie"
+title: "BUA 455 - Week 7"
+
+subtitle: "Time Series, Data Formats, Output Formats, Project Intro"  
+author: "Penelope Pooler Eisenbies"
 date: '`r Sys.Date()`'
 output:
   xaringan::moon_reader:
+    seal: false
     css: xaringan-themer.css
     nature:
-      slideNumberFormat: "%current%"
-      highlightStyle: github
+      slideNumberFormat: "%current%/%total%" 
+      highlightStyle: tomorrow-night-bright
       highlightLines: true
       ratio: 16:9
       countIncrementalSlides: true
+      keep_md: true
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, echo=FALSE}
 options(htmltools.dir.version = FALSE)
 knitr::opts_chunk$set(
-  fig.width=9, fig.height=3.5, fig.retina=3,
-  out.width = "100%",
+  fig.retina=2,
+  #out.width = "75%",
+  #out.height = "50%",
+  htmltools.preserve.raw = FALSE,      # needed for windows
+  scipen=100,                          # suppresses scientific notation
+  getSymbols.warning4.0 = FALSE,       # suppresses getSymbols warnings
   cache = FALSE,
   echo = TRUE,
+  hiline = TRUE,
   message = FALSE, 
-  warning = FALSE,
-  hiline = TRUE
+  warning = FALSE
 )
+
+
+# install helper package (pacman)
+# pacman loads and installs other packages, if needed
+if (!require("pacman")) install.packages("pacman", repos = "http://lib.stat.cmu.edu/R/CRAN/")
+
+# install and load required packages
+# pacman should be first package in parentheses and then list others
+pacman::p_load(pacman, tidyverse, gridExtra, magrittr, lubridate, 
+               knitr, kableExtra, tidyquant, highcharter, dygraphs, 
+               htmlwidgets)
+
+# verify packages (comment out in finished documents)
+p_loaded()
+
+
 ```
 
 ```{r xaringan-themer, include=FALSE, warning=FALSE}
 library(xaringanthemer)
+
+palette <- c(
+  SU_Orange1        = "#F76900",
+  SU_Orange2        = "#FF8E00",
+  SU_Red_Orange     = "#FF431B",
+  SU_Blue1          = "#000E54",
+  SU_Blue2          = "#203299",
+  SU_Light_Blue     = "#2B72D7",
+  SU_White          = "#FFFFFF",
+  SU_Light_Gray     = "#ADB3B8",
+  SU_Medium_Gray    = "#707780",
+  SU_Black          = "#000000", 
+  
+  steel_blue        = "#4682B4",
+  corn_flower_blue  = "#6495ED",
+  deep_sky_blue     = "#00BFFF",
+  dark_magenta      = "#8B008B",
+  medium_orchid     = "#BA55D3",
+  lime_green        = "#32CD32",
+  light_sea_green   = "#20B2AA",
+  chartreuse        = "#7FFF00",
+  orange_red        = "#FF4500",
+  white_smoke       = "#F5F5F5",
+  dark_cyan         = "#008B8B",
+  light_steel_blue  = "#B0C4DE",
+  indigo            = "#4B0082",
+  ivory             = "#FFFFF0",
+  light_slate_grey  = "#778899",
+  linen             = "#FAF0E6",
+  steel_blue        = "#4682B4",
+  blue_violet       = "#8A2BE2",
+  dodger_blue       = "#1E90FF",
+  light_blue        = "#ADD8E6",
+  azure             = "#F0FFFF",
+  lavender          = "#E6E6FA")
+
+primary_color = "#4682B4"                # steel_blue
+secondary_color = "#778899"              # light_slate_grey
+white_color = "#FFFFF0"                  # ivory
+black_color = "#000080"                  # navy
+
 style_duo_accent(
-  primary_color = "#1381B0",
-  secondary_color = "#FF961C",
-  inverse_header_color = "#FFFFFF"
+  primary_color = primary_color,
+  secondary_color = secondary_color,
+  white_color = white_color,
+  black_color = black_color,
+  text_color = black_color,
+  header_color = primary_color,
+  background_color = white_color,
+  code_inline_background_color = "#E6E6FA", # lavender
+  link_color = "#1E90FF",                   # dodger_blue
+  code_inline_color = "#4B0082",            # indigo
+  text_bold_color = "#8B008B",              # dark_magenta
+  header_font_google = google_font("Open Sans"),
+  text_font_google = google_font("Open Sans"),
+  code_font_google = google_font("Source Code Pro"),
+  colors = palette
 )
+
+
 ```
 
-## Typography
-
-Text can be **bold**, _italic_, ~~strikethrough~~, or `inline code`.
-
-[Link to another slide](#colors).
-
-### Lorem Ipsum
-
-Dolor imperdiet nostra sapien scelerisque praesent curae metus facilisis dignissim tortor. 
-Lacinia neque mollis nascetur neque urna velit bibendum. 
-Himenaeos suspendisse leo varius mus risus sagittis aliquet venenatis duis nec.
-
-- Dolor cubilia nostra nunc sodales
-
-- Consectetur aliquet mauris blandit
-
-- Ipsum dis nec porttitor urna sed
-
----
-name: colors
-
-## Colors
-
-.left-column[
-Text color
-
-[Link Color](#3)
-
-**Bold Color**
-
-_Italic Color_
-
-`Inline Code`
-]
-
-.right-column[
-Lorem ipsum dolor sit amet, [consectetur adipiscing elit (link)](#3), 
-sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-Erat nam at lectus urna.
-Pellentesque elit ullamcorper **dignissim cras tincidunt (bold)** lobortis feugiat. 
-_Eros donec ac odio tempor_ orci dapibus ultrices. 
-Id porta nibh venenatis cras sed felis eget velit aliquet.
-Aliquam id diam maecenas ultricies mi.
-Enim sit amet 
-`code_color("inline")`
-venenatis urna cursus eget nunc scelerisque viverra.
-]
-
----
-
-# Big Topic or Inverse Slides `#`
-
-## Slide Headings `##`
-
-### Sub-slide Headings `###`
-
-#### Bold Call-Out `####`
-
-This is a normal paragraph text. Only use header levels 1-4.
-
-##### Possible, but not recommended `#####`
-
-###### Definitely don't use h6 `######`
-
----
-
-# Left-Column Headings
-
-.left-column[
-## First
-
-## Second
-
-## Third
-]
-
-.right-column[
-Dolor quis aptent mus a dictum ultricies egestas.
-
-Amet egestas neque tempor fermentum proin massa!
-
-Dolor elementum fermentum pharetra lectus arcu pulvinar.
-]
-
----
-class: inverse center middle
-
-# Topic Changing Interstitial
-
---
-
-```
-class: inverse center middle
+```{r xaringan-panelset, echo=FALSE}
+xaringanExtra::use_panelset()
 ```
 
----
-layout: true
-
-## Blocks
-
----
-
-### Blockquote
-
-> This is a blockquote following a header.
->
-> When something is important enough, you do it even if the odds are not in your favor.
-
----
-
-### Code Blocks
-
-#### R Code
-
-```{r eval=FALSE}
-ggplot(gapminder) +
-  aes(x = gdpPercap, y = lifeExp, size = pop, color = country) +
-  geom_point() +
-  facet_wrap(~year)
+```{r xaringan-tile-view, echo=FALSE}
+xaringanExtra::use_tile_view()
 ```
 
-#### JavaScript
-
-```js
-var fun = function lang(l) {
-  dateformat.i18n = require('./lang/' + l)
-  return true;
-}
+```{r xaringan-fit-screen, echo=FALSE}
+xaringanExtra::use_fit_screen()
 ```
 
----
-
-### More R Code
-
-```{r eval=FALSE}
-dplyr::starwars %>% dplyr::slice_sample(n = 4)
+```{r xaringan-tachyons, echo=FALSE}
+xaringanExtra::use_tachyons()
 ```
 
----
-
-```{r message=TRUE, eval=requireNamespace("cli", quietly = TRUE)}
-cli::cli_alert_success("It worked!")
+```{r xaringan-animate-css, echo=FALSE}
+xaringanExtra::use_animate_css()
 ```
 
---
-
-```{r message=TRUE}
-message("Just a friendly message")
+```{r xaringan-animate-all, echo=FALSE}
+#xaringanExtra::use_animate_all("slide_up")
 ```
 
---
+background-image: url("docs_files/images/sloth_faded.png")
+background-size: cover
 
-```{r warning=TRUE}
-warning("This could be bad...")
-```
+class: bottom, right
 
---
+## BUA 455 - Week 7
 
-```{r error=TRUE}
-stop("I hope you're sitting down for this")
-```
+### Time Series, Data Formats, Output Formats, Project Intro 
+
+<br>
 
 
----
-layout: true
+#### Penelope Pooler Eisenbies
 
-## Tables
+#### `r Sys.Date()`
 
----
-exclude: `r if (requireNamespace("tibble", quietly=TRUE)) "false" else "true"`
-
-```{r eval=requireNamespace("tibble", quietly=TRUE)}
-tibble::as_tibble(mtcars)
-```
+[Wikipedia Sloth Page](https://en.wikipedia.org/wiki/Sloth)
 
 ---
 
-```{r}
-knitr::kable(head(mtcars), format = 'html')
-```
+### Quiz 1 
 
----
-exclude: `r if (requireNamespace("DT", quietly=TRUE)) "false" else "true"`
+- Quiz 1 is now graded
 
-```{r eval=requireNamespace("DT", quietly=TRUE)}
-DT::datatable(head(mtcars), fillContainer = FALSE, options = list(pageLength = 4))
-```
+  - 60%: Submitted Markdown File
+  
+  - 40%: Blackboard Answers + Submitted .csv file + Submitted .png file
 
----
-layout: true
+- For the most part scores were very high
 
-## Lists
+  - This tells me that most of you are learning to use these skills
+  
+  - Please don't worry if you are not happy with your score
+  
+- Quiz 2 will be during Week 11 and will combine previous skills with material from weeks 6 through 10
 
----
+  - Same format but more questions
+  
+  - More multi-step tasks
 
-.pull-left[
-#### Here is an unordered list:
-
-*   Item foo
-*   Item bar
-*   Item baz
-*   Item zip
-]
-
-.pull-right[
-
-#### And an ordered list:
-
-1.  Item one
-1.  Item two
-1.  Item three
-1.  Item four
-]
+- If you have questions about your quiz, please let me know
 
 ---
 
-### And a nested list:
+### BUA 455 Group Dashboard Project
 
-- level 1 item
-  - level 2 item
-  - level 2 item
-    - level 3 item
-    - level 3 item
-- level 1 item
-  - level 2 item
-  - level 2 item
-  - level 2 item
-- level 1 item
-  - level 2 item
-  - level 2 item
-- level 1 item
+#### Groups
 
----
+- Complete HW 4 - Part 1 TODAY! (This should only take 5 min.)
 
-### Nesting an ol in ul in an ol
+  - **Note:** If you do not complete this Survey, I will not put you in a project group and you can not pass this class.
+  
+- Groups of 6 will be determined and posted (Hopefully by Thursday)
 
-- level 1 item (ul)
-  1. level 2 item (ol)
-  1. level 2 item (ol)
-    - level 3 item (ul)
-    - level 3 item (ul)
-- level 1 item (ul)
-  1. level 2 item (ol)
-  1. level 2 item (ol)
-    - level 3 item (ul)
-    - level 3 item (ul)
-  1. level 4 item (ol)
-  1. level 4 item (ol)
-    - level 3 item (ul)
-    - level 3 item (ul)
-- level 1 item (ul)
+- If you have a request to work with someone, include that information in your survey.
 
----
-layout: true
+  - Today is your last chance to let me know.
 
-## Plots
+  - I cannot guarantee that requests will be honored, but I will try.
+  
+<br>
+
+#### Project Information Links
+
+- [Project Description](https://docs.google.com/document/d/1U-DJ3yeHPpxcg1o12Cg2qc2Besb6Jw6UiyAo6gR4S2I/edit?usp=sharing)
+
+- Project Ideas, Data Sources, etc. will be posted soon
 
 ---
 
-```{r plot-example, eval=requireNamespace("ggplot2", quietly=TRUE)}
-library(ggplot2)
-(g <- ggplot(mpg) + aes(hwy, cty, color = class) + geom_point())
+### Upcoming Dates
+
+- **October 14th-16th:** Professor Pooler is out of town
+  - I will not be checking email.
+  
+- **Groups assigned by October 18th, but possibly sooner.**
+  
+- **Mon. October 24th:** Draft Proposals Due (2 - 3 paragraphs)
+
+- **Thu. October 27th:** 
+  - Groups should come with questions and be prepared to answer my questions (5 min. per groups)
+
+-   **Mon. October 31st:**  Final Proposals Due
+
+-   **Wed. November 2nd:**  HW 5 - Part 1 Due
+
+-   **Thu. November 10th:**  Quiz 2 (Updated Schedule)
+
+---
+
+### Questions about HW 4
+
+- Chunk Headers  
+  
+  - In Chunk 6 (Part 5), the chunk header in the the template appears as follows:
+
+    ```
+    {r create and save plot, eval=F}
+
+    ```
+- The `eval=F` prevents this chunk from being evaluated when it is knit.
+
+- It was included in the template because the original code provided was incomplete and incorrect and would cause errors when knit.
+
+- You are asked to remove the comma and the text `eval=F`
+
+- There are many other chunk header options.
+
+- Two common ones that you will use in your project are `echo=F` and `include=F`
+
+- Markdown References
+
+  - [Cheat Sheet](https://github.com/rstudio/cheatsheets/raw/main/rmarkdown-2.0.pdf)
+  
+  - [Reference Guide](https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf)
+
+---
+
+### Markdown Output Formats
+
+- So far, all work in this course has been done in R Markdown and we have intentionally used the default output format.
+
+- Other common formats are Word documents, PDF documents, Powerpoint Slides, and **dashboards**
+
+#### Dashboard Templates in the `flexdashboard` package
+
+- There are many types of dashboards. Here are [some example dashboards](https://rstudio.github.io/flexdashboard/articles/examples.html) created with `flexdashboard` and other packages in R
+
+- For this course (which focuses on Data Management), we will use a excellent introductory option, [storyboard](https://beta.rstudioconnect.com/jjallaire/htmlwidgets-showcase-storyboard/htmlwidgets-showcase-storyboard.html)
+  
+  - This template simplifies the dashboard development process 
+  
+  - Can be used to present data and visualizations in a progression
+
+- The Storyboard template is an R Markdown file with some very **specific pre-set features**
+
+  - **These minor details are required** or the dashboard will not knit correctly.
+
+  - HW 5 - Part 1 and HW 5 - Part 2 will be completed in a storyboard dashboard format to give you practice working with data in this way.
+
+---
+
+### Types of Time Series Data in R
+
+- In recent weeks, we have worked with Box Office Mojo and Bureau of Labor Statistics Data
+
+- These datasets all include a date variable and another quantitative variable that changes at each time period, e.g. 
+
+  - movie gross (HW 3)
+  - unemployment rate (HW 4)
+  - import and export indices (HW 4)
+  
+- All of these datasets are considered time series but the data format in R is called a `tibble`.
+
+- Two common data formats in R, `tibble` and `data.frame` are needed for creating ggplots of time series.
+  `tibble` are the more modern format and are more compatible with `tidyverse` commands to manage data.
+  
+- Today, we'll discuss a third data format, `xts` 
+
+
+---
+
+### Importing Stock Data as `xts` using `tidyquant` Package
+
+- [Yahoo Finance](https://finance.yahoo.com/), the Federal Reserve Bank, WSJ and others are excellent data sources that can be directly imported into R
+  
+  - default for `getsymbols` in the `tidyquant` package is Yahoo Finance
+  
+  - Data format is `xts` which we will cover today
+  
+```{r importing data from yahoo finance, results='hide'}
+
+# download data from Netflix, Amazon, Disney
+getSymbols("NFLX", from = "2012-01-01", to = "2022-10-01")
+getSymbols("AMZN", from = "2012-01-01", to = "2022-10-01")
+getSymbols("DIS", from = "2012-01-01", to = "2022-10-01")
+
 ```
 
 ---
 
-```{r plot-example-themed, eval=requireNamespace("showtext", quietly=TRUE) && requireNamespace("ggplot2", quietly=TRUE)}
-g + xaringanthemer::theme_xaringan(text_font_size = 16, title_font_size = 18) +
-  ggtitle("A Plot About Cars")
+### Example of Imported Yahoo Finance Data
+
+By default, imported datas are assigned to stock symbol in ALL CAPS, e.g. **NFLX**
+
+```{r display of imported yahoo finance data}
+
+head(NFLX)
+
+
 ```
 
-.footnote[Requires `{showtext}`]
-
 ---
-layout: false
-
-## Square image
-
-<center><img src="https://octodex.github.com/images/labtocat.png" alt="GithHub Octocat" height="400px" /></center>
-
-.footnote[GitHub Octocat]
-
----
-
-### Wide image
-
-![A wide image with a diagram of branching in git.](https://docs.github.com/assets/images/help/repository/branching.png)
-
-.footnote[Wide images scale to 100% slide width]
-
----
-
-## Two images
-
-.pull-left[
-![A GitHub Octocat, style "mother hubber"](https://octodex.github.com/images/motherhubbertocat.png)
-]
-
-.pull-right[
-![A GitHub Octocat, style "dinotcat"](https://octodex.github.com/images/dinotocat.png)
-]
-
----
-
-### Definition lists can be used with HTML syntax.
-
-<dl>
-<dt>Name</dt>
-<dd>Godzilla</dd>
-<dt>Born</dt>
-<dd>1952</dd>
-<dt>Birthplace</dt>
-<dd>Japan</dd>
-<dt>Color</dt>
-<dd>Green</dd>
-</dl>
-
----
-class: center, middle
-
-# Thanks!
-
-Slides created via the R packages:
-
-[**xaringan**](https://github.com/yihui/xaringan)<br>
-[gadenbuie/xaringanthemer](https://github.com/gadenbuie/xaringanthemer)
-
-The chakra comes from [remark.js](https://remarkjs.com), [**knitr**](http://yihui.name/knitr), and [R Markdown](https://rmarkdown.rstudio.com).
