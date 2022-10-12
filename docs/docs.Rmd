@@ -331,3 +331,19 @@ head(NFLX)
 ```
 
 ---
+### Example of `hchart` for One Stock
+
+`hchart` in the `highcharter` package is one way to plot `xts` data
+
+```{r hchart of 1 stock, fig.dim=c(15,5), eval=F}
+hchart(NFLX$NFLX.Adjusted, name="Adjusted", color="green") |>   # plot adjusted close
+  hc_add_series(NFLX$NFLX.High, name="High" , color="blue") |>  # add daily high
+  hc_add_series(NFLX$NFLX.Low, name="Low" , color="red")        # add daily low
+```
+
+---
+
+
+
+
+---

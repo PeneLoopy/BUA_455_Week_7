@@ -235,6 +235,23 @@ head(NFLX)
 ```
 
 ---
+### Example of `hchart` for One Stock
+
+`hchart` in the `highcharter` package is one way to plot `xts` data
+
+
+```r
+hchart(NFLX$NFLX.Adjusted, name="Adjusted", color="green") |&gt;   # plot adjusted close
+  hc_add_series(NFLX$NFLX.High, name="High" , color="blue") |&gt;  # add daily high
+  hc_add_series(NFLX$NFLX.Low, name="Low" , color="red")        # add daily low
+```
+
+---
+
+
+
+
+---
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
