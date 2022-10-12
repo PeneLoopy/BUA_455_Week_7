@@ -235,6 +235,7 @@ head(NFLX)
 ```
 
 ---
+
 ### Example of `hchart` for One Stock
 
 `hchart` in the `highcharter` package is one way to plot `xts` data
@@ -248,10 +249,107 @@ hchart(NFLX$NFLX.Adjusted, name="Adjusted", color="green") |&gt;   # plot adjust
 
 ---
 
+### R code for a Multi-Panel Composition of `hcharts`
 
+- Stocks can be shown in separate plots that can be shown side by side or in one stacked column
+
+- The command `hw_grid` is used to display them and `ncol` indicates how many columns.
+
+
+```r
+nflx_plt &lt;- hchart(NFLX$NFLX.Adjusted, name="Adjusted", color="green") |&gt;
+  hc_add_series(NFLX$NFLX.High, name="High" , color="darkgreen") |&gt;
+  hc_add_series(NFLX$NFLX.Low, name="Low" , color="lightgreen")
+
+amzn_plt &lt;- hchart(AMZN$AMZN.Adjusted, name="Adjusted", color="blue") |&gt;
+  hc_add_series(AMZN$AMZN.High, name="High" , color="darkblue") |&gt;
+  hc_add_series(AMZN$AMZN.Low, name="Low" , color="lightblue")
+
+dis_plt &lt;- hchart(DIS$DIS.Adjusted, name="Adjusted", color="mediumpurple") |&gt;
+  hc_add_series(DIS$DIS.High, name="High" , color="purple4") |&gt;
+  hc_add_series(DIS$DIS.Low, name="Low" , color="plum")
+```
+
+---
+
+### Display of Multi-Panel Composition of `hcharts`
+
+
+```r
+hw_grid(nflx_plt, amzn_plt, dis_plt, ncol=3)
+```
 
 
 ---
+
+class: middle
+
+### Week 7 In-class Exercises (TP L11 - Q1)
+
+***PointSolutions Session ID: bua455s22***
+
+In the example above, we use the `hw_grid` command to create multi-plot composition of hcharts.
+
+Previously, we covered another command to do the same thing with non-interactive ggplots of `tibble` data.
+
+What is that other command?  
+
+Hints: This very useful command is in the `gridExtra` package which is loaded.
+
+If `gridExtra` is loaded, start typing `grid` in the console, and the command and others will appear.
+
+---
+
+class: middle
+
+### Week 7 In-class Exercises (TP L11 - Q2)
+
+***PointSolutions Session ID: bua455s22***
+
+1.  Use provided exampled of `getSymbols` code to write code to import the stock time series for Apple (`AAPL`)
+    -   Use these dates: from = "2012-01-01", to = "2022-08-31"
+    
+2.  Open the imported `xts` file by clicking on it in the `Global Environment`
+
+3.  Sort the `AAPL.Adjusted` column by clicking on it.
+
+4.  Answer **PL** Question:
+    -   On what recent date, was AAPL at it's highest value?
+
+---
+
+### `XTS` Data
+
+#### More Information about `xts` 
+
+- When these stock datasets are imported, they are in `xts` format.
+
+- `xts` stands for **Extensible Time Series** which means they are self-aware.
+
+- The key feature is that `date` is NOT a variable, but instead the dates become row IDs.
+
+  - Any dataset with a `date` variable can be converted to an `xts` dataset.
+
+   - Any `xts` dataset can be converted a tibble or data.frame (two common R data formats).
+   
+
+```r
+head(NFLX)
+```
+
+```
+##            NFLX.Open NFLX.High NFLX.Low NFLX.Close NFLX.Volume NFLX.Adjusted
+## 2012-01-03  10.04000  10.38857 10.01857   10.32000    29213800      10.32000
+## 2012-01-04  10.33571  11.56714 10.25857   11.49286   100489900      11.49286
+## 2012-01-05  11.34571  11.69429 11.04000   11.32857    86552900      11.32857
+## 2012-01-06  11.30286  12.47143 11.24286   12.32714   125610800      12.32714
+## 2012-01-09  12.80143  14.23571 12.44857   14.02571   214073300      14.02571
+## 2012-01-10  14.25714  14.26286 13.21429   13.69000   146335000      13.69000
+```
+
+---
+
+
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
