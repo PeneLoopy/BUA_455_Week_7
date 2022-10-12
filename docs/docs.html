@@ -349,6 +349,69 @@ head(NFLX)
 
 ---
 
+### Merging `xts` datasets using merge
+
+- Converting xts to a tibble or dataframe (R data formats) is required if you want to create a ggplot or use other methods covered previously
+
+- A good first step is to create a merged xts dataset of the variables you want.
+
+
+```r
+# all merged xts datasets must have same date index
+nflx_amzn_dis &lt;- merge(NFLX$NFLX.Adjusted,
+                       AMZN$AMZN.Adjusted,
+                       DIS$DIS.Adjusted) 
+head(nflx_amzn_dis)
+```
+
+```
+##            NFLX.Adjusted AMZN.Adjusted DIS.Adjusted
+## 2012-01-03      10.32000        8.9515     34.30062
+## 2012-01-04      11.49286        8.8755     34.78411
+## 2012-01-05      11.32857        8.8805     35.36607
+## 2012-01-06      12.32714        9.1305     35.73317
+## 2012-01-09      14.02571        8.9280     35.58992
+## 2012-01-10      13.69000        8.9670     35.48247
+```
+
+---
+
+### Converting `xts` datasets to tibble format
+
+- There are a few ways to convert an xts to a tibble.
+
+- In the code below I show the conversion and then I rename the the new date variable as `date`
+
+
+```r
+# converting data to a tibble requires a couple lines of code 
+# I prefer to rename the index as date 
+nflx_amzn_dis_tibble &lt;- nflx_amzn_dis |&gt; 
+  fortify.zoo() |&gt; as_tibble(.name_repair = "minimal") |&gt;
+  rename("date" = "Index") 
+head(nflx_amzn_dis_tibble)
+```
+
+```
+## # A tibble: 6 × 4
+##   date       NFLX.Adjusted AMZN.Adjusted DIS.Adjusted
+##   &lt;date&gt;             &lt;dbl&gt;         &lt;dbl&gt;        &lt;dbl&gt;
+## 1 2012-01-03          10.3          8.95         34.3
+## 2 2012-01-04          11.5          8.88         34.8
+## 3 2012-01-05          11.3          8.88         35.4
+## 4 2012-01-06          12.3          9.13         35.7
+## 5 2012-01-09          14.0          8.93         35.6
+## 6 2012-01-10          13.7          8.97         35.5
+```
+
+---
+
+### Converting tibble format datasets to `xts`
+
+- Any dataset with a date formatted variable can be converted to an `xts` dataset
+- We can use `hchart` or `dygraph` (next week) for any time series
+
+
 
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>

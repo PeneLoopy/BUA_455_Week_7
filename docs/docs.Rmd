@@ -469,13 +469,5 @@ head(nflx_amzn_dis_tibble)
 - Any dataset with a date formatted variable can be converted to an `xts` dataset
 - We can use `hchart` or `dygraph` (next week) for any time series
 
-```{r convert tibble to xts dataset and plot, fig.dim=c(15,4)}
-
-exp_imp <- read_csv("export_import_tidy.csv", show_col_types=F)
-exp_imp_xts <- xts(x=exp_imp[,2:3], order.by=exp_imp$date) # order.by must be a date variable
-
-(exp_imp_hc <- hchart(exp_imp_xts$exp_indx, name="Export Price Index", color="blue") |>
-  hc_add_series(exp_imp_xts$imp_indx, name="Import Price Index" , color="red"))
-```
 
 
