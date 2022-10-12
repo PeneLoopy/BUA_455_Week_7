@@ -483,3 +483,81 @@ hchart(exp_imp_xts$exp_indx, name="Export Price Index", color="blue") |>
 ```
 
 ---
+
+### Dygraphs - One Alternative to `hchart` for `XTS` data
+
+.panelset[
+.panel[.panel-name[**`dygraph` Info**]
+
+- `dygraph` is A more flexible alternative to `hchart`.
+
+- Both `hchart` and `dygraph` are useful and which you choose depends on your goal(s).
+
+  - Many students find `dygraphs` useful for projects.
+  - You can add reference lines and shading
+  - Both `dygraph` and `hchart` allow viewer to interactively select date range
+  
+Here is the dataset we will use:
+
+```{r create dataset for dygraphs}
+three_stocks <- merge(AMZN$AMZN.Adjusted, DIS$DIS.Adjusted, NFLX$NFLX.Adjusted) 
+names(three_stocks) <- c("AMZN.adj", "DIS.adj", "NFLX.adj")
+head(three_stocks, 3) # print first three rows only
+```
+
+]
+
+.panel[.panel-name[**Unformatted `dygraph`**]
+This first plot is basic unformatted plot of three stocks with the range selector option.
+
+```{r basic dygraph with range selector, fig.dim=c(15,4)}
+
+(dy3 <- dygraph(three_stocks, main="Streaming Company Stock Trends") |>
+  dySeries("AMZN.adj", label="AMZN", color= "green") |>
+  dySeries("DIS.adj", label="DIS", color= "red") |>
+  dySeries("NFLX.adj", label="NFLX", color= "blue") |>
+  dyRangeSelector())
+
+```
+
+
+]
+
+.panel[.panel-name[** Some formatting**]
+
+Two useful formatting options (shown below) to make the plot more readable are:
+ - Removing the the grid lines 
+ - Formatting the axis labels
+```{r dygraph with axes labeled and gridlines removed, fig.dim=c(15,3.5)}
+(dy3 <- dy3 |>
+  dyAxis("y", label = "Adjusted Close", drawGrid = FALSE) |>
+  dyAxis("x", label = "Date", drawGrid = FALSE))
+```
+ 
+
+]
+
+.panel[.panel-name[**Event Lines**]
+Vertical lines can be added at specific dates and can be labeled and formatted.
+
+```{r dygraph with event lines, fig.dim=c(15,4)}
+(dy3 <- dy3 |>
+  dyEvent("2020-3-12", label = "Theaters Closed", labelLoc = "bottom") |>
+  dyEvent("2021-6-15", label = "Restrictions End", labelLoc = "bottom", strokePattern = "solid"))
+```
+
+]
+
+.panel[.panel-name[**Shaded Regions**]
+Alternatively, it may be helpful to shade plot for a specific time range.
+
+```{r dygraph with shaded time period, fig.dim=c(15,4)}
+(dy3 <- dy3 |>
+  dyShading(from = "2020-3-12", to = "2021-6-15", axis = "x", color = "lightgrey"))
+```
+
+]
+
+]
+
+---
