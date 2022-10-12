@@ -860,7 +860,7 @@ NOTES:
   - Hampers collaboration and code execution
 
 - When possible use R Projects, code_data_output folders, and R Markdown files 
-  - No Need to set working directory
+  - No need to set working directory
   - As you advance, you may use separate folders for code, data, and output within projects.
 ---
 
@@ -868,9 +868,9 @@ background-image: url("docs_files/images/tired_panda_faded.png")
 background-size: cover
 
 
-### **Key Points from Week 7**
-
 .pull-left[
+
+### **Key Points from Week 7**
 
 .bg-azure.b--dark_cyan.ba.bw2.br3.shadow-5.ph2[
 
