@@ -561,3 +561,343 @@ Alternatively, it may be helpful to shade plot for a specific time range.
 ]
 
 ---
+
+### Review of `bls_tidy` Function for Labor Data
+
+- Before using our function on new data, we **ALWAYS** examine the .csv files
+
+- The number of rows to skip for these three labor datasets is **`11`**
+
+```{r run bls_tidy and import labor data}
+
+bls_tidy <- function(data_file, skip_num, var_name){
+  read_csv(data_file, skip = skip_num, show_col_types = F) |> 
+  pivot_longer(cols = Jan:Dec,                      
+               names_to = "month", 
+               values_to = "value") |>
+  filter(!is.na(value)) |>                    
+  rename({{var_name}} := "value")                             
+}
+
+labor_force <- bls_tidy("bls_civ_lf.csv", skip_num=11, var_name="lf")
+unemp <- bls_tidy("bls_civ_unemp.csv", skip_num=11, var_name="unemp")
+emp <- bls_tidy("bls_civ_emp.csv", skip_num=11, var_name="emp")
+
+head(unemp)
+
+```
+
+---
+
+### Joining More than Two Datasets
+
+- Last Week and in HW 4 we covered joining **2** datasets.
+
+- The commands we covered (there are 4) all have the same limitation: **datasets must be joined two at a time.**
+
+.pull-left[
+
+```{r joining labor force data with pipes}
+# with piping
+lf_all <- labor_force |>
+  full_join(emp) |>
+  full_join(unemp) |>
+  write_csv("labor_tidy.csv")
+head(lf_all)
+
+```
+]
+
+.pull-right[
+
+<br>
+
+```{r joining labor force data without pipes}
+# without piping
+lf_all <- full_join(labor_force, emp) 
+lf_all <- full_join(lf_all, unemp) 
+head(lf_all)
+
+```
+]
+
+
+---
+
+### Creating a Date Variable and Modifying Data for a Plot (Review)
+
+- Includes code that is similar to Parts 3 and 4 of HW 4.
+
+```{r dates and data mod for plot}
+
+lf_plt <- lf_all |>
+  mutate(date = ym(paste(Year, month)),           # create date var
+         empM = (emp/1000) |> round(2),           # convert counts to millions
+         unempM = (unemp/1000) |> round(2)) |>
+  select(date, empM, unempM) |>                   # select vars and reshape
+  pivot_longer(cols=empM:unempM, names_to = "type", values_to = "count") |>
+  mutate(type = factor(type,                      # create factor var for plot
+                       levels = c("unempM", "empM"),
+                       labels = c("Unemployed", "Employed"))) 
+
+head(lf_plt, 8) # examine first 8 rows
+
+```
+
+
+---
+
+### Creating a Polished Area Plot for Slides
+
+- Useful for data that sum to a whole: **Employed + Unemployed = Total Labor Force**
+
+```{r plot code for lf area plot}
+
+lf_area_plt_slides <- lf_plt |>
+  ggplot() +
+  geom_area(aes(x=date, y=count, fill=type)) +
+  theme_classic() +
+  theme(legend.position="bottom") +
+  scale_fill_manual(values=c("red", "blue")) + 
+  scale_x_date(date_breaks = "year", date_labels = "%Y") +
+  labs(x="Date", y = "Number of Peolple (Millions)", fill="",
+       title="Total Labor Force: Employed and Unemployed ", 
+       subtitle="Jan. 2012 - Sep. 2022",
+       caption="Data Source:www.bls.gov") + 
+  theme(plot.title = element_text(size = 20),                    
+        plot.subtitle = element_text(size = 15),
+        axis.title = element_text(size=18),
+        axis.text = element_text(size=15),
+        plot.caption = element_text(size = 10),
+        legend.text = element_text(size = 12),
+        panel.border = element_rect(colour = "lightgrey", fill=NA, size=2),
+        plot.background = element_rect(colour = "darkgrey", fill=NA, size=2))
+
+```
+
+---
+
+### Area Plot Formatted for Slides
+
+```{r display of final area plot, echo=F, fig.dim=c(15,7)}
+
+lf_area_plt_slides
+
+```
+
+---
+
+### Creating an Area Plot for HTML, Documents and Export
+
+- Additional formatting (shown above) can always be added
+
+```{r simpler plot code for lf area plot }
+
+lf_area_plt <- lf_plt |>
+  ggplot() +
+  geom_area(aes(x=date, y=count, fill=type)) +
+  theme_classic() +
+  theme(legend.position="bottom") +
+  scale_fill_manual(values=c("red", "blue")) + 
+  scale_x_date(date_breaks = "year", date_labels = "%Y") +
+  labs(x="Date", y = "Number of Peolple (Millions)", fill="",
+       title="Total Labor Force: Employed and Unemployed ", 
+       subtitle="Jan. 2012 - Sep. 2022",
+       caption="Data Source:www.bls.gov")
+
+```
+
+#### Using R code to export a plot or image 
+- There are **MANY** other options besides `.png`
+```{r export plot as png file, eval=F}
+png("labor_force_area_plot.png", height=480, width=720)
+lf_area_plt
+dev.off()
+
+```
+
+---
+
+### Exported Plot
+
+- Looks fine in HTML notes but not slides
+- May be fine in Word Document or Dashboard
+- If not, previous code shows options for formatting
+
+```{r display of plot that was exported, fig.dim=c(15,6), echo=F}
+lf_area_plt
+
+```
+
+---
+
+### Week 7 In-class Exercise
+
+In this exercise we will 
+
+**`1.`** Import `labor_tidy.csv` and convert variables to millions and round to 2 decimal places and select two variables. (Review)
+   
+```{r import labor_tidy and modify vars}
+
+labor_new <- read_csv("labor_tidy.csv") |>
+  mutate(date = ym(paste(Year,month)),
+         lfM = (lf/1000) |> round(2),
+         empM = (emp/1000) |> round(2))|>
+  select(date, lfM, empM)
+
+```
+
+
+**`2.`** Convert `labor_new` to an `xts` format, `labor_xts`
+
+```{r convert labor_new to xts}
+# labor_xts
+
+```
+
+
+```{r convert labor_new to xts solution, echo=F}
+labor_xts <- labor_new |> xts(x=labor_new[,2:3], order.by=labor_new$date)
+  
+```
+
+---
+
+**`3`**. Create a `hchart` with two variables
+   - No additional formatting is expected (difficult in hchart)
+   - Plot `lfM` and `empM` and save it as `labor_hc`
+```{r create and display labor hchart}
+# (labor_hc <- hchart())
+```
+
+```{r create hchart for labor data, echo=F, fig.dim=c(15,5), eval=F}
+# create labor and emp plot and print to screen
+(labor_hc <- hchart(labor_xts$lfM, name="Tot. Labor Force (mill.)", color="red") |>   
+  hc_add_series(labor_xts$empM, name="Employed (mill.)", color="blue"))
+# export as html file
+  saveWidget(widget = labor_hc, file="labor_hc.html")
+```
+
+---
+
+**`4.`** Create a `dygraph` with same two variables from `hchart`
+   - Include `dyRangeSelector`
+   - Add axis labels to `dygraph` using `dyAxis`
+   - Optional but not required: adding `dyEvent` lines or `dyShading`
+   
+```{r create and display labor dygraph}
+# (labor_dy <- dygraph())
+```
+
+```{r labor dygraph solution, echo=F, fig.dim=c(15,5)}
+(labor_dy <- dygraph(labor_xts, main="Total Labor and Employed") |>
+  dySeries("lfM", label="Total Labor", color= "red") |>
+  dySeries("empM", label="Employed", color= "blue") |>
+  dyRangeSelector() |>
+  dyAxis("y", label = "Number of People (Millions)", drawGrid = FALSE) |>
+  dyAxis("x", label = "Date", drawGrid = FALSE) |>
+  dyEvent("2020-3-12", 
+          label = "Pandemic Lockdown Began", 
+          labelLoc = "bottom",
+          strokePattern = "dashed"))
+
+# save dygraph as a separate html
+# saveWidget(widget = labor_dy, file="labor_dy.html")
+```
+
+---
+   
+**`5.`** Show me your 2 plots by end of class on Thursday (if possible)
+  
+- Interactive plots can be exported as HTML files
+- Blackboard does not let students submit .html files because of virus concerns.
+
+Code to export a dygraph as an html file (`htmlwidgets` package required):
+
+`saveWidget(widget = labor_dy, file="labor_dy.html")`
+   
+**`6.`** Final Step: Although we use R markdown files in this course, it is sometimes useful to save R code as an R Script.
+
+In the R project `code_data_output` folder I have saved an R Script for your work.
+
+- Copy and paste code into provided R Script and use save as to save the file with your name., e.g. `Week_7_In_Class_Penelope_Pooler.R`
+
+- R Script should include: 
+
+  - code I provided to import and modify data
+
+  - tibble to xts conversion of labor dataset
+
+  - hchart plot code
+
+  - dygraph plot code
+
+  - add comments to code using `#` so that you can understand it and use it later.
+
+- Submit final script on Blackboard.  This will count towards your class particpation for Week 7.
+
+---
+
+### Additional Comments about R Markdown files and R Scripts
+
+- Markdown files are 'smart': File is aware of it's location 
+
+- R Scripts (older common file type) are useful BUT not aware of file location.
+  - User must specify working directory
+  
+  - The script I provided is saved to your working directory
+  
+- To check working directory:  `getwd()`
+
+- To set working directory to code_data_output folder: (for working in an R Script)
+  - Click Session > Set Working Directory > To Source File Location
+
+NOTES: 
+- R users and developers do not recommend setting working directories
+  - Have to be changed in the R code for each computer
+  - Hampers collaboration and code execution
+
+- When possible use R Projects, code_data_output folders, and R Markdown files 
+  - No Need to set working directory
+  - As you advance, you may use separate folders for code, data, and output within projects.
+---
+
+background-image: url("docs_files/images/tired_panda_faded.png")
+background-size: cover
+
+
+### **Key Points from Week 7**
+
+.pull-left[
+
+.bg-azure.b--dark_cyan.ba.bw2.br3.shadow-5.ph2[
+
+**Time Series Data**
+
+- Importing stock data from Yahoo Finance as `xts` 
+
+- Converting between `xts` and `tibble`
+
+- Plotting options include area plots, hcharts and dygraphs
+
+- `dygraphs` and `hcharts` are useful tools for understnading, managing, and curating time series data.
+
+- HW 4 was due Wednesday, 10/12
+
+  - Grace period in effect.  TAs are available to assist if you have questions on Friday.
+  
+  - Reminder: I am out of town and not answering email from 10/14 to 10/16
+
+]
+
+]
+
+.pull-right[
+
+
+.bg-azure.b--dark_cyan.ba.bw2.br3.shadow-5.ph3[
+**You may submit an 'Engagement Question or Comment' about Week 7 lectures until Thursday, 10/13, at midnight on Blackboard.**
+]
+
+
+]
