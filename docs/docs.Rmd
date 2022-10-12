@@ -42,7 +42,7 @@ if (!require("pacman")) install.packages("pacman", repos = "http://lib.stat.cmu.
 # pacman should be first package in parentheses and then list others
 pacman::p_load(pacman, tidyverse, gridExtra, magrittr, lubridate, 
                knitr, kableExtra, tidyquant, highcharter, dygraphs, 
-               htmlwidgets)
+               htmlwidgets, widgetframe)
 
 # verify packages (comment out in finished documents)
 p_loaded()
@@ -336,10 +336,11 @@ head(NFLX)
 
 `hchart` in the `highcharter` package is one way to plot `xts` data
 
-```{r hchart of 1 stock, fig.dim=c(15,5), eval=F}
-hchart(NFLX$NFLX.Adjusted, name="Adjusted", color="green") |>   # plot adjusted close
+```{r hchart of 1 stock, fig.dim=c(15,4.5)}
+hc_nflx <- hchart(NFLX$NFLX.Adjusted, name="Adjusted", color="green") |>   # plot adj. close
   hc_add_series(NFLX$NFLX.High, name="High" , color="blue") |>  # add daily high
   hc_add_series(NFLX$NFLX.Low, name="Low" , color="red")        # add daily low
+frameWidget(hc_nflx)
 
 ```
 
@@ -880,7 +881,7 @@ background-size: cover
 
 - Plotting options include area plots, hcharts and dygraphs
 
-- `dygraphs` and `hcharts` are useful tools for understnading, managing, and curating time series data.
+- `dygraphs` and `hcharts` are useful tools for understanding, managing, and curating time series data.
 
 - HW 4 was due Wednesday, 10/12
 
