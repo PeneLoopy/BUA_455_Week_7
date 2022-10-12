@@ -431,4 +431,51 @@ head(NFLX)
 
 ---
 
+### Merging `xts` datasets using merge
+
+- Converting xts to a tibble or dataframe (R data formats) is required if you want to create a ggplot or use other methods covered previously
+
+- A good first step is to create a merged xts dataset of the variables you want.
+
+```{r merge xts stock data }
+# all merged xts datasets must have same date index
+nflx_amzn_dis <- merge(NFLX$NFLX.Adjusted,
+                       AMZN$AMZN.Adjusted,
+                       DIS$DIS.Adjusted) 
+head(nflx_amzn_dis)
+```
+
+---
+
+### Converting `xts` datasets to tibble format
+
+- There are a few ways to convert an xts to a tibble.
+
+- In the code below I show the conversion and then I rename the the new date variable as `date`
+
+```{r convert xts to tibble}
+# converting data to a tibble requires a couple lines of code 
+# I prefer to rename the index as date 
+nflx_amzn_dis_tibble <- nflx_amzn_dis |> 
+  fortify.zoo() |> as_tibble(.name_repair = "minimal") |>
+  rename("date" = "Index") 
+head(nflx_amzn_dis_tibble)
+```
+
+---
+
+### Converting tibble format datasets to `xts`
+
+- Any dataset with a date formatted variable can be converted to an `xts` dataset
+- We can use `hchart` or `dygraph` (next week) for any time series
+
+```{r convert tibble to xts dataset and plot, fig.dim=c(15,4)}
+
+exp_imp <- read_csv("export_import_tidy.csv", show_col_types=F)
+exp_imp_xts <- xts(x=exp_imp[,2:3], order.by=exp_imp$date) # order.by must be a date variable
+
+(exp_imp_hc <- hchart(exp_imp_xts$exp_indx, name="Export Price Index", color="blue") |>
+  hc_add_series(exp_imp_xts$imp_indx, name="Import Price Index" , color="red"))
+```
+
 
