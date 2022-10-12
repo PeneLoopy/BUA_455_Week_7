@@ -340,6 +340,7 @@ head(NFLX)
 hchart(NFLX$NFLX.Adjusted, name="Adjusted", color="green") |>   # plot adjusted close
   hc_add_series(NFLX$NFLX.High, name="High" , color="blue") |>  # add daily high
   hc_add_series(NFLX$NFLX.Low, name="Low" , color="red")        # add daily low
+
 ```
 
 ---
@@ -469,5 +470,16 @@ head(nflx_amzn_dis_tibble)
 - Any dataset with a date formatted variable can be converted to an `xts` dataset
 - We can use `hchart` or `dygraph` (next week) for any time series
 
+```{r convert tibble to xts dataset}
 
+exp_imp <- read_csv("export_import_tidy.csv", show_col_types=F)
+exp_imp_xts <- xts(x=exp_imp[,2:3], order.by=exp_imp$date) # order.by must be a date variable
 
+```
+
+```{r hchart of export import data, , fig.dim=c(15,4), eval=F}
+hchart(exp_imp_xts$exp_indx, name="Export Price Index", color="blue") |>
+   hc_add_series(exp_imp_xts$imp_indx, name="Import Price Index" , color="red")
+```
+
+---

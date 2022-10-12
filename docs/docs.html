@@ -367,10 +367,10 @@ head(nflx_amzn_dis)
 ```
 ##            NFLX.Adjusted AMZN.Adjusted DIS.Adjusted
 ## 2012-01-03      10.32000        8.9515     34.30062
-## 2012-01-04      11.49286        8.8755     34.78411
-## 2012-01-05      11.32857        8.8805     35.36607
+## 2012-01-04      11.49286        8.8755     34.78410
+## 2012-01-05      11.32857        8.8805     35.36608
 ## 2012-01-06      12.32714        9.1305     35.73317
-## 2012-01-09      14.02571        8.9280     35.58992
+## 2012-01-09      14.02571        8.9280     35.58991
 ## 2012-01-10      13.69000        8.9670     35.48247
 ```
 
@@ -412,6 +412,16 @@ head(nflx_amzn_dis_tibble)
 - We can use `hchart` or `dygraph` (next week) for any time series
 
 
+```r
+exp_imp &lt;- read_csv("export_import_tidy.csv", show_col_types=F)
+exp_imp_xts &lt;- xts(x=exp_imp[,2:3], order.by=exp_imp$date) # order.by must be a date variable
+```
+
+
+```r
+hchart(exp_imp_xts$exp_indx, name="Export Price Index", color="blue") |&gt;
+   hc_add_series(exp_imp_xts$imp_indx, name="Import Price Index" , color="red")
+```
 
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
