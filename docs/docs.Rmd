@@ -1,6 +1,5 @@
 ---
 title: "BUA 455 - Week 7"
-
 subtitle: "Time Series, Data Formats, Output Formats, Project Intro"  
 author: "Penelope Pooler Eisenbies"
 date: '`r Sys.Date()`'
@@ -162,19 +161,17 @@ class: bottom, right
 
 - Quiz 1 is now graded
 
-  - 60%: Submitted Markdown File
+  - 65%: Submitted Markdown File
   
-  - 40%: Blackboard Answers + Submitted .csv file + Submitted .png file
-
-- For the most part scores were very high
-
-  - This tells me that most of you are learning to use these skills
+  - 30%: Blackboard Answers 
   
-  - Please don't worry if you are not happy with your score
+  - 5%: Submitted .csv file (2%) + Submitted .png file (3%)
+
+- Please don't worry if you are not happy with your score
   
 - Quiz 2 will be during Week 11 and will combine previous skills with material from weeks 6 through 10
 
-  - Same format but more questions
+  - Same format but may have more questions
   
   - More multi-step tasks
 
@@ -190,9 +187,9 @@ class: bottom, right
 
   - **Note:** If you do not complete this Survey, I will not put you in a project group and you can not pass this class.
   
-- Groups of 6 will be determined and posted (Hopefully by Thursday)
+- Groups of 5 or 6 will be determined and posted (Hopefully by Friday)
 
-- If you have a request to work with someone, include that information in your survey.
+- If you have a request to work with someone, include that information in your survey (Not required).
 
   - Today is your last chance to let me know.
 
@@ -210,21 +207,20 @@ class: bottom, right
 
 ### Upcoming Dates
 
-- **October 14th-16th:** Professor Pooler is out of town
-  - I will not be checking email.
+- **Groups assigned by March 3rd (hopefully)**
   
-- **Groups assigned by October 18th, but possibly sooner.**
-  
-- **Mon. October 24th:** Draft Proposals Due (2 - 3 paragraphs)
+- **Tue. March 21st at 5:00 PM:** Draft Proposals Due (2 - 3 paragraphs) - NO GRACE PERIOD
 
-- **Thu. October 27th:** 
+- **Thu. March 23rd:** 
   - Groups should come with questions and be prepared to answer my questions (5 min. per groups)
 
--   **Mon. October 31st:**  Final Proposals Due
+-   **Mon. March 27th:**  Final Proposals Due
 
--   **Wed. November 2nd:**  HW 5 - Part 1 Due
+-   **Fri. March 31st:**  HW 5 - Part 1 Due
 
--   **Thu. November 10th:**  Quiz 2 (Updated Schedule)
+-   **Tue. April 4th:**  Quiz 2
+
+-   **Thu. April 6th:**  NO CLASS
 
 ---
 
@@ -248,7 +244,9 @@ class: bottom, right
 
 - Two common ones that you will use in your project are `echo=F` and `include=F`
 
-- Markdown References
+- SIDE NOTE: If tow chunks are given the EXACT SAME name, e.g. `importing data`, document will not knit.
+
+- **Markdown References**
 
   - [Cheat Sheet](https://github.com/rstudio/cheatsheets/raw/main/rmarkdown-2.0.pdf)
   
@@ -311,9 +309,11 @@ class: bottom, right
 ```{r importing data from yahoo finance, results='hide'}
 
 # download data from Netflix, Amazon, Disney
-getSymbols("NFLX", from = "2012-01-01", to = "2022-10-01")
-getSymbols("AMZN", from = "2012-01-01", to = "2022-10-01")
-getSymbols("DIS", from = "2012-01-01", to = "2022-10-01")
+# time series starts day after from date specified
+# time series ends day before to date specified
+getSymbols("NFLX", from = "2013-01-01", to = "2023-02-24")
+getSymbols("AMZN", from = "2013-01-01", to = "2023-02-24")
+getSymbols("DIS", from = "2013-01-01", to = "2023-02-24")
 
 ```
 
@@ -321,7 +321,7 @@ getSymbols("DIS", from = "2012-01-01", to = "2022-10-01")
 
 ### Example of Imported Yahoo Finance Data
 
-By default, imported datas are assigned to stock symbol in ALL CAPS, e.g. **NFLX**
+By default, imported dates are assigned to stock symbol in ALL CAPS, e.g. **NFLX**
 
 ```{r display of imported yahoo finance data}
 
@@ -336,7 +336,7 @@ head(NFLX)
 
 `hchart` in the `highcharter` package is one way to plot `xts` data
 
-**NOTE: `hchart` seems to be incompatible with Xaringan (this slide format)**
+**NOTE: `hchart` is incompatible with Xaringan (this slide format)**
 
 ```{r hchart of 1 stock, fig.dim=c(15,4.5), eval=F}
 hc_nflx <- hchart(NFLX$NFLX.Adjusted, name="Adjusted", color="green") |>   # plot adj. close
@@ -352,6 +352,8 @@ hc_nflx <- hchart(NFLX$NFLX.Adjusted, name="Adjusted", color="green") |>   # plo
 - Stocks can be shown in separate plots that can be shown side by side or in one stacked column
 
 - The command `hw_grid` is used to display them and `ncol` indicates how many columns.
+
+**NOTE: `hchart` is incompatible with Xaringan (this slide format)**
 
 ```{r separate stock plots, eval=F}
 nflx_plt <- hchart(NFLX$NFLX.Adjusted, name="Adjusted", color="green") |>
@@ -371,6 +373,8 @@ dis_plt <- hchart(DIS$DIS.Adjusted, name="Adjusted", color="mediumpurple") |>
 
 ### Display of Multi-Panel Composition of `hcharts`
 
+**NOTE: `hchart` is incompatible with Xaringan (this slide format)**
+
 ```{r display of plots, fig.dim=c(15,6), eval=F}
 hw_grid(nflx_plt, amzn_plt, dis_plt, ncol=3)
 ```
@@ -382,7 +386,7 @@ class: middle
 
 ### Week 7 In-class Exercises (TP L11 - Q1)
 
-***PointSolutions Session ID: bua455s22***
+***PointSolutions Session ID: bua455s23***
 
 In the example above, we use the `hw_grid` command to create multi-plot composition of hcharts.
 
@@ -392,7 +396,8 @@ What is that other command?
 
 Hints: This very useful command is in the `gridExtra` package which is loaded.
 
-If `gridExtra` is loaded, start typing `grid` in the console, and the command and others will appear.
+If `gridExtra` is loaded in R, start typing `grid` in the console, and the command and others will appear.
+
 
 ---
 
@@ -400,10 +405,10 @@ class: middle
 
 ### Week 7 In-class Exercises (TP L11 - Q2)
 
-***PointSolutions Session ID: bua455s22***
+***PointSolutions Session ID: bua455s23***
 
 1.  Use provided exampled of `getSymbols` code to write code to import the stock time series for Apple (`AAPL`)
-    -   Use these dates: from = "2012-01-01", to = "2022-08-31"
+    - Use these dates: from = "2015-01-01", to = "2023-02-01"
     
 2.  Open the imported `xts` file by clicking on it in the `Global Environment`
 
@@ -470,7 +475,7 @@ head(nflx_amzn_dis_tibble)
 ### Converting tibble format datasets to `xts`
 
 - Any dataset with a date formatted variable can be converted to an `xts` dataset
-- We can use `hchart` or `dygraph` (next week) for any time series
+- We can use `hchart` or `dygraph` (next topic) for any time series
 
 ```{r convert tibble to xts dataset}
 
@@ -629,20 +634,22 @@ head(lf_all)
 ### Creating a Date Variable and Modifying Data for a Plot (Review)
 
 - Includes code that is similar to Parts 3 and 4 of HW 4.
+- BONUS: Code modified to show how to get 'End of Month' (eom) date (**[Useful Link](https://www.statology.org/lubridate-first-last-day-of-month/)**)
 
 ```{r dates and data mod for plot}
 
 lf_plt <- lf_all |>
-  mutate(date = ym(paste(Year, month)),           # create date var
-         empM = (emp/1000) |> round(2),           # convert counts to millions
+  mutate(date_som = ym(paste(Year, month)),         # create som date var
+         date = ceiling_date(date_som, "month")-1,  # create eom month date var
+         empM = (emp/1000) |> round(2),             # convert counts to millions
          unempM = (unemp/1000) |> round(2)) |>
-  select(date, empM, unempM) |>                   # select vars and reshape
+  select(date, empM, unempM) |>                     # select vars and reshape
   pivot_longer(cols=empM:unempM, names_to = "type", values_to = "count") |>
-  mutate(type = factor(type,                      # create factor var for plot
+  mutate(type = factor(type,                        # create factor var for plot
                        levels = c("unempM", "empM"),
                        labels = c("Unemployed", "Employed"))) 
 
-head(lf_plt, 8) # examine first 8 rows
+head(lf_plt, 4) # examine first 8 rows
 
 ```
 
@@ -738,6 +745,8 @@ lf_area_plt
 In this exercise we will 
 
 **`1.`** Import `labor_tidy.csv` and convert variables to millions and round to 2 decimal places and select two variables. (Review)
+
+- OPTIONAL: use provided example to create an END of Month (eom) date variable and use that.
    
 ```{r import labor_tidy and modify vars}
 
@@ -884,11 +893,9 @@ background-size: cover
 
 - `dygraphs` and `hcharts` are useful tools for understanding, managing, and curating time series data.
 
-- HW 4 was due Wednesday, 10/12
+- HW 4 due Wednesday, 3/1
 
-  - Grace period in effect.  TAs are available to assist if you have questions on Friday.
-  
-  - Reminder: I am out of town and not answering email from 10/14 to 10/16
+  - Grace period in effect.  TAs and I are available to assist if you have questions.
 
 ]
 
@@ -898,7 +905,7 @@ background-size: cover
 
 
 .bg-azure.b--dark_cyan.ba.bw2.br3.shadow-5.ph3[
-**You may submit an 'Engagement Question or Comment' about Week 7 lectures until Thursday, 10/13, at midnight on Blackboard.**
+You may submit an 'Engagement Question' about each lecture until midnight on the day of the lecture. **A minimum of four submissions are required during the semester.**
 ]
 
 
