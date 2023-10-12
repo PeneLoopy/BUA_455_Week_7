@@ -1,0 +1,743 @@
+---
+title: "Week 7 and 8 - Time Series, Data Formats, Output Formats, Project Intro"
+author: "Penelope Pooler Eisenbies"
+date: "`r Sys.Date()`"
+output: 
+  html_document: 
+    code_folding: hide
+    toc: yes
+    toc_depth: 4
+    toc_float: yes
+---
+
+```{r setup, include=TRUE}
+
+# this line specifies options for default options for all R Chunks
+knitr::opts_chunk$set(echo=T, 
+                      highlight=T)
+
+# suppress scientific notation
+options(scipen=100,
+        getSymbols.warning4.0 = FALSE)
+
+# install helper package (pacman), if needed
+if (!require("pacman")) install.packages("pacman", repos = "http://lib.stat.cmu.edu/R/CRAN/")
+
+# install and load required packages
+# pacman should be first package in parentheses and then list others
+pacman::p_load(pacman, tidyverse, gridExtra, magrittr, lubridate, 
+               knitr, kableExtra, tidyquant, highcharter, dygraphs, 
+               htmlwidgets)
+
+# verify packages (comment out in finished documents)
+p_loaded()
+
+```
+
+---
+
+### Quiz 1 
+
+- Quiz 1 is now graded
+
+  - 10%: Submitted Markdown File
+  
+  - 90%: Blackboard Answers + .csv files and .png file
+  
+- Please don't worry if you are not happy with your score
+  
+- Quiz 2 will be during Week 11 and will combine previous skills with material from weeks 6 through 10
+
+  - Same format but may have more questions
+  
+  - More multi-step tasks
+
+- If you have questions about your quiz, please let me know
+
+---
+
+### BUA 455 Group Dashboard Project
+
+#### Groups
+
+- Complete HW 4 - Part 1 TODAY! (This should only take 5 min.)
+
+  - **Note:** If you do not complete this Survey, I will not put you in a project group and you can not pass this class.
+  
+- Groups of 6 will be determined and posted (Hopefully by Friday)
+
+- If you have a request to work with someone, include that information in your survey (Not required).
+
+  - Today is your last chance to let me know.
+
+  - I cannot guarantee that requests will be honored, but I will try.
+  
+<br>
+
+#### Project Information Links
+
+- [Project Description](https://docs.google.com/document/d/1U-DJ3yeHPpxcg1o12Cg2qc2Besb6Jw6UiyAo6gR4S2I/edit?usp=sharing)
+
+- Project Ideas, Data Sources, etc. also available, and will be updated.
+
+---
+
+### Upcoming Dates
+
+- **Groups assigned by Monday (10/16) at the latest**
+
+- **Tue. 10/24:** NO CLASS
+  
+- **Thu. 10/26 at 5:00 PM:** Draft Proposals Due (2 - 3 paragraphs) - NO GRACE PERIOD
+
+- **Tue. 10/31: Proposal Meetings** 
+  - Groups should come with questions and be prepared to answer my questions (10 min. per groups)
+  
+-  **Fri. 11/3:**  HW 5 - Part 1 Due
+
+-  **Thu. 11/9:**  Quiz 2
+
+-  **Tue. 11/14:**  Final Proposals Due
+
+---
+
+### Questions about HW 4
+
+- Chunk Headers  
+  
+  - In Chunk 6 (Part 5), the chunk header in the the template appears as follows:
+
+    ```
+    {r create and save plot, eval=F}
+
+    ```
+- The `eval=F` prevents this chunk from being evaluated when it is knit.
+
+- It was included in the template because the original code provided was incomplete and incorrect and would cause errors when knit.
+
+- You are asked to remove the comma and the text `eval=F`
+
+- There are many other chunk header options.
+
+- Two common ones that you will use in your project are `echo=F` and `include=F`
+
+- SIDE NOTE: If tow chunks are given the EXACT SAME name, e.g. `importing data`, document will not knit.
+
+- **Markdown References**
+
+  - [Cheat Sheet](https://github.com/rstudio/cheatsheets/raw/main/rmarkdown-2.0.pdf)
+  
+  - [Reference Guide](https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf)
+
+---
+
+### Markdown Output Formats
+
+- So far, all work in this course has been done in R Markdown and we have intentionally used the default output format, `.html`.
+
+- Other common formats are Word documents (see example), PDF documents, Powerpoint Slides, and **dashboards**
+
+#### Dashboard Templates in the `flexdashboard` package
+
+- There are many types of dashboards. Here are [some example dashboards](https://rstudio.github.io/flexdashboard/articles/examples.html) created with `flexdashboard` and other packages in R
+
+- For this course (which focuses on Data Management), we will use a excellent introductory option, [storyboard](https://beta.rstudioconnect.com/jjallaire/htmlwidgets-showcase-storyboard/htmlwidgets-showcase-storyboard.html)
+  
+  - This template simplifies the dashboard development process 
+  
+  - Can be used to present data and visualizations in a progression
+
+- The Storyboard template is an R Markdown file with some very **specific pre-set features**
+
+  - **These minor details are required** or the dashboard will not knit correctly.
+
+  - HW 5 - Part 1 and HW 5 - Part 2 will be completed in a storyboard dashboard format to give you practice working with data in this way.
+
+---
+
+### Types of Time Series Data in R
+
+- In recent weeks, we have worked with Box Office Mojo and Bureau of Labor Statistics Data
+
+- These datasets all include a date variable and another quantitative variable that changes at each time period, e.g. 
+
+  - movie gross (HW 3)
+  - unemployment rate (HW 4)
+  - import and export indices (HW 4)
+  
+- All of these datasets are considered time series but the data format in R is called a `tibble`.
+
+- Two common data formats in R, `tibble` and `data.frame` are needed for creating ggplots of time series.
+  `tibble` are the more modern format and are more compatible with `tidyverse` commands to manage data.
+  
+- Today, we'll discuss a third data format, `xts` 
+
+
+---
+
+### Importing Stock Data as `xts` using `tidyquant` Package
+
+- [Yahoo Finance](https://finance.yahoo.com/), the Federal Reserve Bank, WSJ and others are excellent data sources that can be directly imported into R
+  
+  - default for `getsymbols` in the `tidyquant` package is Yahoo Finance
+  
+  - Data format is `xts` which we will cover today
+  
+```{r importing data from yahoo finance, results='hide'}
+
+# download data from Netflix, Amazon, Disney
+# time series starts day after from date specified
+# time series ends day before to date specified
+getSymbols("NFLX", from = "2014-01-01", to = "2023-09-30")
+getSymbols("AMZN", from = "2014-01-01", to = "2023-09-30")
+getSymbols("DIS", from = "2014-01-01", to = "2023-09-30")
+
+```
+
+---
+
+### Example of Imported Yahoo Finance Data
+
+By default, imported dates are assigned to stock symbol in ALL CAPS, e.g. **NFLX**
+
+```{r display of imported yahoo finance data}
+
+head(NFLX)
+
+```
+
+---
+
+### Example of `hchart` for One Stock
+
+`hchart` in the `highcharter` package is one way to plot `xts` data
+
+```{r hchart of 1 stock, fig.dim=c(15,5)}
+hchart(NFLX$NFLX.Adjusted, name="Adjusted", color="green") |>   # plot adjusted close
+  hc_add_series(NFLX$NFLX.High, name="High" , color="blue") |>  # add daily high
+  hc_add_series(NFLX$NFLX.Low, name="Low" , color="red")        # add daily low
+```
+
+---
+
+### Example of `hchart` for Three Stocks
+
+```{r  hchart of 3 stocks, fig.dim=c(15,5)}
+hchart(AMZN$AMZN.Adjusted, name="AMZN", color="green") |>      # plot AMZN adjusted close
+  hc_add_series(DIS$DIS.High, name="DIS" , color="blue") |>    # add DIS adjusted close
+  hc_add_series(NFLX$NFLX.Low, name="NFLX" , color="red")      # add NFLX adjusted close
+
+```
+
+---
+
+### R code for a Multi-Panel Composition of `hcharts`
+
+- Stocks can be shown in separate plots that can be shown side by side or in one stacked column
+
+- The command `hw_grid` is used to display them and `ncol` indicates how many columns.
+
+```{r separate stock plots}
+nflx_plt <- hchart(NFLX$NFLX.Adjusted, name="Adjusted", color="green") |>
+  hc_add_series(NFLX$NFLX.High, name="High" , color="darkgreen") |>
+  hc_add_series(NFLX$NFLX.Low, name="Low" , color="lightgreen")
+
+amzn_plt <- hchart(AMZN$AMZN.Adjusted, name="Adjusted", color="blue") |>
+  hc_add_series(AMZN$AMZN.High, name="High" , color="darkblue") |>
+  hc_add_series(AMZN$AMZN.Low, name="Low" , color="lightblue")
+
+dis_plt <- hchart(DIS$DIS.Adjusted, name="Adjusted", color="mediumpurple") |>
+  hc_add_series(DIS$DIS.High, name="High" , color="purple4") |>
+  hc_add_series(DIS$DIS.Low, name="Low" , color="plum")
+```
+
+---
+
+### Display of Multi-Panel Composition of `hcharts`
+
+```{r display of plots, fig.dim=c(15,6)}
+hw_grid(nflx_plt, amzn_plt, dis_plt, ncol=3)
+```
+
+---
+
+
+class: middle
+
+### Week 7 In-class Exercises (Q1)
+
+***PointSolutions Session ID: bua455f23***
+
+In the example above, we use the `hw_grid` command to create multi-plot composition of hcharts.
+
+Previously, we covered another command to do the same thing with non-interactive ggplots of `tibble` data.
+
+What is that other command?  
+
+Hints: This very useful command is in the `gridExtra` package which is loaded.
+
+If `gridExtra` is loaded in R, start typing `grid` in the console, and the command and others will appear.
+
+---
+
+
+class: middle
+
+### Week 7 In-class Exercises (Q2)
+
+***PointSolutions Session ID: bua455f23***
+
+1.  Use provided exampled of `getSymbols` code to write code to import the stock time series for Apple (`AAPL`)
+    - Use these dates: from = "2015-01-01", to = "2023-10-01"
+    
+2.  Open the imported `xts` file by clicking on it in the `Global Environment`
+
+3.  Sort the `AAPL.Adjusted` column by clicking on it.
+
+4.  Answer **AAPL** Question:
+    -   On what recent date, was AAPL at it's highest value?
+
+```{r}
+
+```
+
+
+
+---
+
+### `XTS` Data
+
+#### More Information about `xts` 
+
+- When these stock datasets are imported, they are in `xts` format.
+
+- `xts` stands for **Extensible Time Series** which means they are self-aware.
+
+- The key feature is that `date` is NOT a variable, but instead the dates become row IDs.
+
+  - Any dataset with a `date` variable can be converted to an `xts` dataset.
+
+   - Any `xts` dataset can be converted a tibble or data.frame (two common R data formats).
+   
+```{r examine xts data}
+head(NFLX)
+```
+
+---
+
+### Merging `xts` datasets using merge
+
+- Converting xts to a tibble or dataframe (R data formats) is required if you want to create a ggplot or use other methods covered previously
+
+- A good first step is to create a merged xts dataset of the variables you want.
+
+```{r merge xts stock data }
+# all merged xts datasets must have same date index
+nflx_amzn_dis <- merge(NFLX$NFLX.Adjusted,
+                       AMZN$AMZN.Adjusted,
+                       DIS$DIS.Adjusted) 
+head(nflx_amzn_dis)
+```
+
+---
+
+### Converting `xts` datasets to tibble format
+
+- There are a few ways to convert an xts to a tibble.
+
+- In the code below I show the conversion and then I rename the the new date variable as `date`
+
+```{r convert xts to tibble}
+# converting data to a tibble requires a couple lines of code 
+# I prefer to rename the index as date 
+nflx_amzn_dis_tibble <- nflx_amzn_dis |> 
+  fortify.zoo() |> as_tibble(.name_repair = "minimal") |>
+  rename("date" = "Index") 
+head(nflx_amzn_dis_tibble)
+
+```
+
+---
+
+### Converting tibble format datasets to `xts`
+
+- Any dataset with a date formatted variable can be converted to an `xts` dataset
+- We can use `hchart` or `dygraph` (next topic) for any time series
+
+```{r convert tibble to xts dataset and plot, fig.dim=c(15,4)}
+
+exp_imp <- read_csv("export_import_tidy.csv", show_col_types=F)
+exp_imp_xts <- xts(x=exp_imp[,2:3], order.by=exp_imp$date) # order.by must be a date variable
+
+(exp_imp_hc <- hchart(exp_imp_xts$exp_indx, name="Export Price Index", color="blue") |>
+  hc_add_series(exp_imp_xts$imp_indx, name="Import Price Index" , color="red"))
+```
+
+---
+
+### Dygraphs - One Alternative to `hchart` for `XTS` data
+
+#### Dygraph Info
+
+- `dygraph` is A more flexible alternative to `hchart`.
+
+- Both `hchart` and `dygraph` are useful and which you choose depends on your goal(s).
+
+  - Many students find `dygraphs` useful for projects.
+  - You can add reference lines and shading
+  - Both `dygraph` and `hchart` allow viewer to interactively select date range
+  
+Here is the dataset we will use:
+
+```{r create dataset for dygraphs}
+three_stocks <- merge(AMZN$AMZN.Adjusted, DIS$DIS.Adjusted, NFLX$NFLX.Adjusted) 
+names(three_stocks) <- c("AMZN.adj", "DIS.adj", "NFLX.adj")
+head(three_stocks, 3) # print first three rows only
+```
+
+---
+
+### Unformatted `dygraph`
+
+This first plot is basic unformatted plot of three stocks with the range selector option.
+
+```{r basic dygraph with range selector, fig.dim=c(15,4)}
+
+(dy3 <- dygraph(three_stocks, main="Streaming Company Stock Trends") |>
+  dySeries("AMZN.adj", label="AMZN", color= "green") |>
+  dySeries("DIS.adj", label="DIS", color= "red") |>
+  dySeries("NFLX.adj", label="NFLX", color= "blue") |>
+  dyRangeSelector())
+
+```
+
+
+### `dygraph` with Some formatting
+
+Two useful formatting options (shown below) to make the plot more readable are:
+ - Removing the the grid lines 
+ - Formatting the axis labels
+```{r dygraph with axes labeled and gridlines removed, fig.dim=c(15,3.5)}
+(dy3 <- dy3 |>
+  dyAxis("y", label = "Adjusted Close", drawGrid = FALSE) |>
+  dyAxis("x", label = "Date", drawGrid = FALSE))
+```
+ 
+---
+
+### Adding Event Lines
+
+Vertical lines can be added at specific dates and can be labeled and formatted.
+
+```{r dygraph with event lines, fig.dim=c(15,4)}
+(dy3 <- dy3 |>
+  dyEvent("2020-3-12", label = "Theaters Closed", labelLoc = "bottom") |>
+  dyEvent("2021-6-15", label = "Restrictions End", labelLoc = "bottom", strokePattern = "solid"))
+```
+
+---
+
+### Adding Shaded Regions
+
+Alternatively, it may be helpful to shade plot for a specific time range.
+
+```{r dygraph with shaded time period, fig.dim=c(15,4)}
+(dy3 <- dy3 |>
+  dyShading(from = "2020-3-12", to = "2021-6-15", axis = "x", color = "lightgrey"))
+```
+
+---
+
+### Review of `bls_tidy` Function for Labor Data
+
+- Before using our function on new data, we **ALWAYS** examine the .csv files
+
+- The number of rows to skip for these three labor datasets is **`11`**
+
+```{r run bls_tidy and import labor data}
+
+bls_tidy <- function(data_file, skip_num, var_name){
+  read_csv(data_file, skip = skip_num, show_col_types = F) |> 
+  pivot_longer(cols = Jan:Dec,                      
+               names_to = "month", 
+               values_to = "value") |>
+  filter(!is.na(value)) |>                    
+  rename({{var_name}} := "value")                             
+}
+
+labor_force <- bls_tidy("bls_civ_lf.csv", skip_num=11, var_name="lf")
+unemp <- bls_tidy("bls_civ_unemp.csv", skip_num=11, var_name="unemp")
+emp <- bls_tidy("bls_civ_emp.csv", skip_num=11, var_name="emp")
+
+head(unemp)
+
+```
+
+---
+
+### Joining More than Two Datasets
+
+- Last Week and in HW 4 we covered joining **2** datasets.
+
+- The commands we covered (there are 4) all have the same limitation: **datasets must be joined two at a time.**
+
+```{r joining labor force data with pipes}
+# with piping
+lf_all <- labor_force |>
+  full_join(emp) |>
+  full_join(unemp) |>
+  write_csv("labor_tidy.csv")
+head(lf_all)
+
+```
+
+<br>
+
+```{r joining labor force data without pipes}
+# without piping
+lf_all <- full_join(labor_force, emp) 
+lf_all <- full_join(lf_all, unemp) 
+head(lf_all)
+
+```
+
+---
+
+### Creating a Date Variable and Modifying Data for a Plot (Review)
+
+- Includes code that is similar to Parts 3 and 4 of HW 4.
+- BONUS: Code modified to show how to get 'End of Month' (eom) date (**[Useful Link](https://www.statology.org/lubridate-first-last-day-of-month/)**)
+
+```{r dates and data mod for plot}
+
+lf_plt <- lf_all |>
+  mutate(date_som = ym(paste(Year, month)),         # create som date var
+         date = ceiling_date(date_som, "month")-1,  # create eom month date var
+         empM = (emp/1000) |> round(2),             # convert counts to millions
+         unempM = (unemp/1000) |> round(2)) |>
+  select(date, empM, unempM) |>                     # select vars and reshape
+  pivot_longer(cols=empM:unempM, names_to = "type", values_to = "count") |>
+  mutate(type = factor(type,                        # create factor var for plot
+                       levels = c("unempM", "empM"),
+                       labels = c("Unemployed", "Employed"))) 
+
+head(lf_plt, 4) # examine first 4 rows
+
+```
+
+---
+
+### Creating a Polished Area Plot for Slides
+
+- Useful for data that sum to a whole: **Employed + Unemployed = Total Labor Force**
+
+```{r plot code for lf area plot}
+
+lf_area_plt_slides <- lf_plt |>
+  ggplot() +
+  geom_area(aes(x=date, y=count, fill=type)) +
+  theme_classic() +
+  theme(legend.position="bottom") +
+  scale_fill_manual(values=c("red", "blue")) + 
+  scale_x_date(date_breaks = "year", date_labels = "%Y") +
+  labs(x="Date", y = "Number of Peolple (Millions)", fill="",
+       title="Total Labor Force: Employed and Unemployed ", 
+       subtitle="Jan. 2012 - Sep. 2022",
+       caption="Data Source:www.bls.gov") + 
+  theme(plot.title = element_text(size = 20),                    
+        plot.subtitle = element_text(size = 15),
+        axis.title = element_text(size=18),
+        axis.text = element_text(size=15),
+        plot.caption = element_text(size = 10),
+        legend.text = element_text(size = 12),
+        panel.border = element_rect(colour = "lightgrey", fill=NA, size=2),
+        plot.background = element_rect(colour = "darkgrey", fill=NA, size=2))
+
+```
+
+---
+
+### Area Plot Formatted for Slides
+
+```{r display of final area plot, echo=F, fig.dim=c(15,7)}
+
+lf_area_plt_slides
+
+```
+
+---
+
+### Creating an Area Plot for HTML, Documents and Export
+
+- Additional formatting (shown above) can always be added
+
+```{r simpler plot code for lf area plot }
+
+lf_area_plt <- lf_plt |>
+  ggplot() +
+  geom_area(aes(x=date, y=count, fill=type)) +
+  theme_classic() +
+  theme(legend.position="bottom") +
+  scale_fill_manual(values=c("red", "blue")) + 
+  scale_x_date(date_breaks = "year", date_labels = "%Y") +
+  labs(x="Date", y = "Number of Peolple (Millions)", fill="",
+       title="Total Labor Force: Employed and Unemployed ", 
+       subtitle="Jan. 2012 - Sep. 2022",
+       caption="Data Source:www.bls.gov")
+
+```
+
+#### Using R code to export a plot or image 
+- There are **MANY** other options besides `.png`
+```{r export plot as png file}
+png("labor_force_area_plot.png", height=480, width=720)
+lf_area_plt
+dev.off()
+
+```
+
+---
+
+### Exported Plot
+
+- Looks fine in HTML notes but not slides
+- May be fine in Word Document or Dashboard
+- If not, previous code shows options for formatting
+
+```{r display of plot that was exported, fig.dim=c(15,6), echo=F}
+lf_area_plt
+
+```
+
+---
+
+### Week 8 In-class Exercise
+
+In this exercise we will 
+
+**`1.`** Import `labor_tidy.csv` and convert variables to millions and round to 2 decimal places and select two variables. (Review)
+
+- OPTIONAL: use provided example to create an END of Month (eom) date variable and use that for exercise.
+   
+```{r import labor_tidy and modify vars}
+
+labor_new <- read_csv("labor_tidy.csv") |>
+  mutate(date = ym(paste(Year,month)),
+         lfM = (lf/1000) |> round(2),
+         empM = (emp/1000) |> round(2))|>
+  select(date, lfM, empM)
+
+```
+
+---
+
+**`2.`** Convert `labor_new` to an `xts` format, `labor_xts`
+
+```{r convert labor_new to xts}
+# labor_xts
+```
+
+
+**`3`**. Create a `hchart` with two variables
+   - No additional formatting is expected (difficult in hchart)
+   - Plot `lfM` and `empM` and save it as `labor_hc`
+```{r create and display labor hchart}
+# (labor_hc <- hchart())
+```
+
+
+**`4.`** Create a `dygraph` with same two variables from `hchart`
+   - Include `dyRangeSelector`
+   - Add axis labels to `dygraph` using `dyAxis`
+   - Optional but not required: adding `dyEvent` lines or `dyShading`
+   
+```{r create and display labor dygraph}
+# (labor_dy <- dygraph())
+```
+
+
+**`5.`** Show me your 2 plots by end of class on Thursday (if possible)
+  
+- Interactive plots can be exported as HTML files
+
+- Blackboard does not let students submit .html files because of virus concerns.
+
+Code to export a dygraph as an html file (`htmlwidgets` package required):
+
+`saveWidget(widget = labor_dy, file="labor_dy.html")`
+   
+**`6.`** Final Step: Although we use R markdown files in this course, it is sometimes useful to save R code as an R Script.
+
+In the R project `code_data_output` folder I have saved an R Script for your work.
+
+- Copy and paste code into provided R Script and use save as to save the file with your name., e.g. `Week_7_In_Class_Penelope_Pooler.R`
+
+- R Script should include: 
+
+  - code I provided to import and modify data
+
+  - tibble to xts conversion of labor dataset
+
+  - hchart plot code
+
+  - dygraph plot code
+
+  - add comments to code using `#` so that you can understand it and use it later.
+
+- Submit final script on Blackboard.  This will count towards your class particpation for Week 7.
+
+
+---
+
+
+### Additional Comments about R Markdown files and R Scripts
+ 
+
+- Markdown files are 'smart': File is aware of it's location 
+
+- R Scripts (older common file type) are useful BUT not aware of file location.
+  - User must specify working directory
+  
+  - The script I provided is saved to your working directory
+  
+- To check working directory:  `getwd()`
+
+- To set working directory to code_data_output folder: (for working in an R Script)
+  - Click Session > Set Working Directory > To Source File Location
+
+NOTES: 
+
+- R users and developers do not recommend setting working directories
+
+  - Have to be changed in the R code for each computer
+  
+  - Hampers collaboration and code execution
+
+- When possible use R Projects, code_data_output folders, and R Markdown files 
+
+  - No need to set working directory
+  
+  - As you advance, you may use separate folders for code, data, and output within projects.
+  
+---
+
+### **Key Points from Week 7 and 8**
+
+**Time Series Data**
+
+- Importing stock data from Yahoo Finance as `xts` 
+
+- Converting between `xts` and `tibble`
+
+- Plotting options include area plots, hcharts and dygraphs
+
+- `dygraphs` and `hcharts` are useful tools for understanding, managing, and curating time series data.
+
+- HW 4 is due Wednesday, 3/1
+
+  - Grace period in effect.  TAs and I are available to assist if you have questions.
+  
+<br>
+
+You may submit an 'Engagement Question' about each lecture until midnight on the day of the lecture. **A minimum of four submissions are required during the semester.**
+
