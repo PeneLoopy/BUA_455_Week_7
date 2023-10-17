@@ -656,7 +656,7 @@ labor_new <- read_csv("labor_tidy.csv") |>
 ```
 
 
-**`5.`** Show me your 2 plots by end of class on Thursday (if possible)
+**`5.`** Show me your 2 plots by end of class on Tuesday (if possible)
   
 - Interactive plots can be exported as HTML files
 
@@ -684,7 +684,7 @@ In the R project `code_data_output` folder I have saved an R Script for your wor
 
   - add comments to code using `#` so that you can understand it and use it later.
 
-- Submit final script on Blackboard.  This will count towards your class particpation for Week 7.
+- Submit final script on Blackboard.  This will count towards your class particpation for Week 8.
 
 
 ---
