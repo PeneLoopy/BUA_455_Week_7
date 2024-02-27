@@ -1,0 +1,107 @@
+---
+title: "Stock Example"
+author: "Penelope Pooler Eisenbies"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+
+```{r setup, include=TRUE}
+
+# this line specifies options for default options for all R Chunks
+knitr::opts_chunk$set(echo=T, 
+                      highlight=T)
+
+# suppress scientific notation
+options(scipen=100,
+        getSymbols.warning4.0 = FALSE)
+
+# install helper package (pacman), if needed
+if (!require("pacman")) install.packages("pacman", repos = "http://lib.stat.cmu.edu/R/CRAN/")
+
+# install and load required packages
+# pacman should be first package in parentheses and then list others
+pacman::p_load(pacman, tidyverse, gridExtra, magrittr, lubridate, 
+               knitr, kableExtra, tidyquant, highcharter, dygraphs)
+
+# verify packages (comment out in finished documents)
+p_loaded()
+
+```
+
+### Importing Stock Data as `xts` using `tidyquant` Package
+
+- [Yahoo Finance](https://finance.yahoo.com/), the Federal Reserve Bank, WSJ and others are excellent data sources that can be directly imported into R
+  
+  - default for `getsymbols` in the `tidyquant` package is Yahoo Finance
+  
+```{r importing data from yahoo finance, results='hide'}
+
+# download data from Netflix, Amazon, Disney individually
+# time series starts day after from date specified
+# time series ends day before to date specified
+getSymbols("NFLX", from = "2023-01-01", to = "2024-01-01")
+getSymbols("AMZN", from = "2023-01-01", to = "2024-01-01")
+getSymbols("DIS", from = "2023-01-01", to = "2024-01-01")
+
+# download multiple stocks with one command
+getSymbols(c("SBUX", "ETSY"), from = "2023-01-01", to = "2024-01-01")
+
+
+```
+
+
+---
+
+
+### `XTS` Data
+
+- When these stock datasets are imported, they are in `xts` format.
+
+- `xts` stands for **Extensible Time Series** which means they are self-aware.
+
+- The key feature is that `date` is NOT a variable, but instead the dates become row IDs.
+
+  - Any dataset with a `date` variable can be converted to an `xts` dataset.
+
+   - Any `xts` dataset can be converted a tibble or data.frame (two common R data formats).
+
+
+---
+
+
+### Merging `xts` datasets using merge
+
+- Converting xts to a tibble or dataframe (R data formats) is required if you want to create a ggplot or use other methods covered previously
+
+- A good first step is to create a merged xts dataset of the variables you want.
+
+- Below, I merge the adjusting closing value for three stocks into a single dataset.
+
+```{r merge xts stock data }
+# all merged xts datasets must have same date index
+nflx_amzn_dis <- merge(NFLX$NFLX.Adjusted,
+                       AMZN$AMZN.Adjusted,
+                       DIS$DIS.Adjusted) 
+head(nflx_amzn_dis)
+```
+
+
+---
+   
+### Converting `xts` datasets to tibble format
+
+- There are a few ways to convert an xts to a tibble.
+
+- In the code below I show the conversion and then I rename the the new date variable as `date`
+
+```{r convert xts to tibble}
+# converting data to a tibble requires a couple lines of code 
+# I prefer to rename the index as date 
+nflx_amzn_dis_tibble <- nflx_amzn_dis |> 
+  fortify.zoo() |> as_tibble(.name_repair = "minimal") |>
+  rename("date" = "Index") 
+head(nflx_amzn_dis_tibble)
+
+```
+

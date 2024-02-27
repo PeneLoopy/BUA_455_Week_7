@@ -1,5 +1,5 @@
 ---
-title: "BUA 455 - Week 7 and 8"
+title: "BUA 455 - Week 7"
 subtitle: "Time Series, Data Formats, Output Formats, Project Intro"  
 author: "Penelope Pooler Eisenbies"
 date: '`r Sys.Date()`'
@@ -142,7 +142,7 @@ background-size: cover
 
 class: bottom, right
 
-## BUA 455 - Week 7 and 8
+## BUA 455 - Week 7
 
 ### Time Series, Data Formats, Output Formats, Project Intro 
 
@@ -185,11 +185,11 @@ class: bottom, right
 
   - **Note:** If you do not complete this Survey, I will not put you in a project group and you can not pass this class.
   
-- Groups of 5 or 6 will be determined and posted this weekend.
+- Groups of 5 or 6 will be determined and posted (Hopefully by Friday)
 
 - If you have a request to work with someone, include that information in your survey (Not required).
 
-  - Today is your last chance to let me know.
+  - **Tomorrow (2/28) is the last day I will accept any group requests.**
 
   - I cannot guarantee that requests will be honored, but I will try.
   
@@ -205,25 +205,25 @@ class: bottom, right
 
 ### Upcoming Dates
 
-- **Groups assigned by Monday (10/16) at the latest**
+- **Groups assigned by Monday (3/4) at the latest**
 
-- **Tue. 10/24:** NO CLASS
+- **Mon.  3/11 - Fri. 3/15 SPRING BREAK** 
   
-- **Thu. 10/26 at 5:00 PM:** Draft Proposals Due (2 - 3 paragraphs) - NO GRACE PERIOD
+- **Thu. 3/21 at 5:00 PM:** Draft Proposals Due (2 - 3 paragraphs) - NO GRACE PERIOD
 
-- **Tue. 10/31: Proposal Meetings** 
-  - Groups should come with questions and be prepared to answer my questions (10 min. per groups)
+- **Tue. 3/26: Proposal Meetings** 
+  - Groups should come with questions and be prepared to answer my questions (10-15 min. per groups)
   
--  **Fri. 11/3:**  HW 5 - Part 1 Due
+-  **Wed. 3/27:**  HW 5 - Part 1 Due
 
--  **Thu. 11/9:**  Quiz 2
+-  **Thu. 4/4:**  Quiz 2
 
--  **Tue. 11/14:**  Final Proposals Due
+-  **Tue. 4/9:**  Final Proposals Due
 
 
 ---
 
-### Questions about HW 4
+### Reminders about HW 4
 
 - Chunk Headers  
   
@@ -243,7 +243,7 @@ class: bottom, right
 
 - Two common ones that you will use in your project are `echo=F` and `include=F`
 
-- SIDE NOTE: If tow chunks are given the EXACT SAME name, e.g. `importing data`, document will not knit.
+- SIDE NOTE: If two chunks are given the EXACT SAME name, e.g. `importing data`, document will not knit.
 
 - **Markdown References**
 
@@ -746,7 +746,7 @@ lf_area_plt
 
 ---
 
-### Week 8 In-class Exercise
+### Week 7 In-class Exercise
 
 In this exercise we will 
 
@@ -824,7 +824,7 @@ labor_xts <- labor_new |> xts(x=labor_new[,2:3], order.by=labor_new$date)
 
 ---
    
-**`5.`** Show me your 2 plots by end of class on Tuesday (if possible)
+**`5.`** Show me your 2 plots by end of class on Thursday (if possible)
   
 - Interactive plots can be exported as HTML files
 - Blackboard does not let students submit .html files because of virus concerns.
@@ -851,7 +851,7 @@ In the R project `code_data_output` folder I have saved an R Script for your wor
 
   - add comments to code using `#` so that you can understand it and use it later.
 
-- Submit final script on Blackboard.  This will count towards your class particpation for Week 8.
+- Submit final script on Blackboard.  This will count towards your class particpation for Week 7.
 
 ---
 
@@ -885,7 +885,7 @@ background-size: cover
 
 .pull-left[
 
-### **Key Points from Week 7 AND 8**
+### **Key Points from Week 7**
 
 .bg-azure.b--dark_cyan.ba.bw2.br3.shadow-5.ph2[
 
@@ -899,9 +899,10 @@ background-size: cover
 
 - `dygraphs` and `hcharts` are useful tools for understanding, managing, and curating time series data.
 
-- HW 4 due Wednesday, 10/11
+- HW 4 due Wednesday, 2/28
 
-  - Grace period EXTENDED until 10/17.  
+  - Grace period in effect.  TA and I are available to assist if you have questions. 
+  
   - TAs and I are available to assist if you have questions.
 
 ]

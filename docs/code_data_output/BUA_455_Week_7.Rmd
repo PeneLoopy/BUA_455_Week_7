@@ -40,12 +40,10 @@ p_loaded()
 
 - Quiz 1 is now graded
 
-  - 65%: Submitted Markdown File
+  - 10%: Submitted Markdown File
   
-  - 30%: Blackboard Answers 
+  - 90%: Blackboard Answers + .csv files and .png file
   
-  - 5%: Submitted .csv file (2%) + Submitted .png file (3%)
-
 - Please don't worry if you are not happy with your score
   
 - Quiz 2 will be during Week 11 and will combine previous skills with material from weeks 6 through 10
@@ -54,7 +52,7 @@ p_loaded()
   
   - More multi-step tasks
 
-- If you have questions about your quiz, please let me know
+- If you have questions about your quiz, please let me know.
 
 ---
 
@@ -66,11 +64,11 @@ p_loaded()
 
   - **Note:** If you do not complete this Survey, I will not put you in a project group and you can not pass this class.
   
-- Groups of 6 will be determined and posted (Hopefully by Friday)
+- Groups of 5 or 6 will be determined and posted (Hopefully by Friday)
 
 - If you have a request to work with someone, include that information in your survey (Not required).
 
-  - Today is your last chance to let me know.
+  - **Tomorrow (2/28) is the last day I will accept any group requests.**
 
   - I cannot guarantee that requests will be honored, but I will try.
   
@@ -80,30 +78,30 @@ p_loaded()
 
 - [Project Description](https://docs.google.com/document/d/1U-DJ3yeHPpxcg1o12Cg2qc2Besb6Jw6UiyAo6gR4S2I/edit?usp=sharing)
 
-- Project Ideas, Data Sources, etc. will be posted soon
+- Project Ideas, Data Sources, etc. also available, and will be updated.
 
 ---
 
 ### Upcoming Dates
 
-- **Groups assigned by March 3rd (hopefully)**
+- **Groups assigned by Monday (3/4) at the latest**
+
+- **Mon.  3/11 - Fri. 3/15 SPRING BREAK** 
   
-- **Tue. March 21st at 5:00 PM:** Draft Proposals Due (2 - 3 paragraphs) - NO GRACE PERIOD
+- **Thu. 3/21 at 5:00 PM:** Draft Proposals Due (2 - 3 paragraphs) - NO GRACE PERIOD
 
-- **Thu. March 23rd:** 
-  - Groups should come with questions and be prepared to answer my questions (5 min. per groups)
+- **Tue. 3/26: Proposal Meetings** 
+  - Groups should come with questions and be prepared to answer my questions (10-15 min. per groups)
+  
+-  **Wed. 3/27:**  HW 5 - Part 1 Due
 
--   **Mon. March 27th:**  Final Proposals Due
+-  **Thu. 4/4:**  Quiz 2
 
--   **Fri. March 31st:**  HW 5 - Part 1 Due
-
--   **Tue. April 4th:**  Quiz 2
-
--   **Thu. April 6th:**  NO CLASS
+-  **Tue. 4/9:**  Final Proposals Due
 
 ---
 
-### Questions about HW 4
+### Reminders about HW 4
 
 - Chunk Headers  
   
@@ -123,7 +121,7 @@ p_loaded()
 
 - Two common ones that you will use in your project are `echo=F` and `include=F`
 
-- SIDE NOTE: If tow chunks are given the EXACT SAME name, e.g. `importing data`, document will not knit.
+- SIDE NOTE: If two chunks are given the EXACT SAME name, e.g. `importing data`, document will not knit.
 
 - **Markdown References**
 
@@ -190,9 +188,9 @@ p_loaded()
 # download data from Netflix, Amazon, Disney
 # time series starts day after from date specified
 # time series ends day before to date specified
-getSymbols("NFLX", from = "2013-01-01", to = "2023-02-24")
-getSymbols("AMZN", from = "2013-01-01", to = "2023-02-24")
-getSymbols("DIS", from = "2013-01-01", to = "2023-02-24")
+getSymbols("NFLX", from = "2014-01-01", to = "2023-09-30")
+getSymbols("AMZN", from = "2014-01-01", to = "2023-09-30")
+getSymbols("DIS", from = "2014-01-01", to = "2023-09-30")
 
 ```
 
@@ -266,9 +264,9 @@ hw_grid(nflx_plt, amzn_plt, dis_plt, ncol=3)
 
 class: middle
 
-### Week 7 In-class Exercises (TP L11 - Q1)
+### Week 7 In-class Exercises (Q1)
 
-***PointSolutions Session ID: bua455s23***
+***PointSolutions Session ID: bua455f23***
 
 In the example above, we use the `hw_grid` command to create multi-plot composition of hcharts.
 
@@ -285,20 +283,24 @@ If `gridExtra` is loaded in R, start typing `grid` in the console, and the comma
 
 class: middle
 
-### Week 7 In-class Exercises (TP L11 - Q2)
+### Week 7 In-class Exercises (Q2)
 
-***PointSolutions Session ID: bua455s22***
+***PointSolutions Session ID: bua455f23***
 
 1.  Use provided exampled of `getSymbols` code to write code to import the stock time series for Apple (`AAPL`)
-    - Use these dates: from = "2015-01-01", to = "2023-02-01"
+    - Use these dates: from = "2015-01-01", to = "2023-10-01"
     
 2.  Open the imported `xts` file by clicking on it in the `Global Environment`
 
 3.  Sort the `AAPL.Adjusted` column by clicking on it.
 
-4.  Answer **PL** Question:
+4.  Answer **AAPL** Question:
     -   On what recent date, was AAPL at it's highest value?
-    
+
+```{r}
+
+```
+
 
 
 ---
@@ -731,9 +733,9 @@ NOTES:
 
 - `dygraphs` and `hcharts` are useful tools for understanding, managing, and curating time series data.
 
-- HW 4 is due Wednesday, 3/1
+- HW 4 is due Wednesday, 2/28
 
-  - Grace period in effect.  TAs and I are available to assist if you have questions.
+  - Grace period in effect.  TA and I are available to assist if you have questions.
   
 <br>
 
