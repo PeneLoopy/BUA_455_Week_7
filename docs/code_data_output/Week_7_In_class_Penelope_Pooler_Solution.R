@@ -1,4 +1,4 @@
-# Include Your name Here
+# Penelope Pooler
 # Week 7 In-class Exercise
 
 # To import files from your code_data_output folder:
@@ -32,3 +32,26 @@ labor_new <- read_csv("labor_tidy.csv", show_col_types = F) |>
          lfM = (lf/1000) |> round(2),                  # format labor force data  
          empM = (emp/1000) |> round(2))|>              # format employed data
   select(date, lfM, empM)                              # select variables needed
+
+
+labor_xts <- xts(x=labor_new[,2:3], order.by=labor_new$date)
+head(labor_xts)
+
+(labor_hc <- hchart(labor_xts$lfM, name="Tot. Labor Force (mill.)", color="red") |>   
+  hc_add_series(labor_xts$empM, name="Employed (mill.)", color="blue"))
+
+(labor_dy <- dygraph(labor_xts, main="Total Labor and Employed") |>
+  dySeries("lfM", label="Total Labor", color= "red") |>
+  dySeries("empM", label="Employed", color= "blue") |>
+  dyRangeSelector() |>
+  dyAxis("y", label = "Number of People (Millions)", drawGrid = FALSE) |>
+  dyAxis("x", label = "Date", drawGrid = FALSE) |>
+  dyEvent("2020-3-12", 
+          label = "Pandemic Lockdown Began", 
+          labelLoc = "bottom",
+          strokePattern = "dashed"))
+
+
+
+
+
